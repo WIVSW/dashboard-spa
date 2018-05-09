@@ -1,0 +1,25 @@
+{
+  "name": "dashboard-spa",
+  "version": "1.0.0",
+  "description": "This Dashboard app for small office tasks",
+  "main": "index.js",
+  "scripts": {
+    "serve": "nodemon src/server/server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/WIVSW/dashboard-spa.git"
+  },
+  "author": "WIVSW",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/WIVSW/dashboard-spa/issues"
+  },
+  "homepage": "https://github.com/WIVSW/dashboard-spa#readme",
+  "dependencies": {
+    "mongoose": "^5.0.17"
+  },
+  "devDependencies": {
+    "nodemon": "^1.17.4"
+  }
+}

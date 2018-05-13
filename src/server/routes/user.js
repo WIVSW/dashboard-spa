@@ -1,15 +1,15 @@
+const BaseRoute = require('./base');
 const UserModel = require('../models/user');
 
 
 
-class UserRoute {
+class UserRoute extends BaseRoute {
     constructor(deps) {
-        this.PATH = '/users';
+        const path = '/users';
+        const { router } = deps;
+        const model = UserModel;
 
-        this._router = deps.router;
-        this._model = UserModel;
-
-        this._setupRoute();
+        super({path, router, model});
     }
 
     _setupRoute() {

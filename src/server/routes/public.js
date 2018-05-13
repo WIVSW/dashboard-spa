@@ -1,14 +1,17 @@
-class PublicRoute {
+const BaseRoute = require('./base');
+
+
+
+class PublicRoute extends BaseRoute {
     constructor(deps) {
-        this.PATH = '/';
+        const path = '/';
+        const { router } = deps;
 
-        this._router = deps.router;
-
-        this._setupRoute();
+        super({path, router});
     }
 
     _setupRoute() {
-        this._router.get('/', (req, res) => {
+        this._router.get(this.PATH, (req, res) => {
             res.send('Hello World');
         });
     }

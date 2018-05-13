@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/WIVSW/dashboard-spa#readme",
   "dependencies": {
+    "express": "^4.16.3",
     "mongoose": "^5.0.17"
   },
   "devDependencies": {

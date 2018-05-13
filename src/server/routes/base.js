@@ -1,4 +1,4 @@
-class BaseRouter {
+class BaseRoute {
     constructor(deps) {
         this.PATH = deps.path;
         this.MODEL = deps.model;
@@ -8,9 +8,13 @@ class BaseRouter {
         this._setupRoute();
     }
 
-    create(req, res, data) {
+    create(data) {
         const model = new this.MODEL(data);
-        return model.save()
+        return model.save();
+    }
+
+    generateResponse(res, promise) {
+        return promise
             .then(
                 (data) => res
                     .status(200)
@@ -23,7 +27,11 @@ class BaseRouter {
             );
     }
 
+    read() {
+        return this.MODEL.find();
+    }
+
     _setupRoute() {}
 }
 
-module.exports = BaseRouter;
+module.exports = BaseRoute;

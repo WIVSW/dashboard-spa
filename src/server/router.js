@@ -1,3 +1,5 @@
+const bodyParser = require('body-parser');
+
 const Public = require('./routes/public');
 const User = require('./routes/user');
 
@@ -19,6 +21,8 @@ class Router {
     }
 
     _bindRoutes() {
+        this._app.use(bodyParser.json());
+
         this._routes.forEach(route => this._app.use(route.PATH, this._router))
     }
 

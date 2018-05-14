@@ -12,38 +12,11 @@ class UserRoute extends BaseRoute {
         super({path, router, model});
     }
 
-    _create(req, res) {
-        return this.generateResponse(res, this.create(req.body));
-    }
-
-    _getByIds(req, res) {
-        const promise = this
-            .getByIds(req.params.id)
-            .then((users) => {
-                if (!users.length) {
-                    res
-                        .status(404)
-                        .send({users});
-                    return Promise.reject(404);
-                }
-
-                return { users };
-            });
-        return this.generateResponse(res, promise);
-    }
-
-    _read(req, res) {
-        const promise = this
-            .read()
-            .then((users) => { return { users } });
-
-        return this.generateResponse(res, promise);
-    }
-
     _setupRoute() {
-        this._router.post(this.PATH, this._create.bind(this));
-        this._router.get(this.PATH, this._read.bind(this));
-        this._router.get(`${this.PATH}/:id`, this._getByIds.bind(this))
+        this._router.post(this.PATH, this._onCreate.bind(this));
+        this._router.get(this.PATH, this._onRead.bind(this));
+        this._router.get(`${this.PATH}/:id`, this._onGetByIds.bind(this));
+        this._router.delete(`${this.PATH}/:id`, this._onDelete.bind(this));
     }
 }
 

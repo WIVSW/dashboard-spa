@@ -13,10 +13,7 @@ class UserRoute extends BaseRoute {
     }
 
     _setupRoute() {
-        this._router.post(this.PATH, this._onCreate.bind(this));
-        this._router.get(this.PATH, this._onRead.bind(this));
-        this._router.get(`${this.PATH}/:id`, this._onGetByIds.bind(this));
-        this._router.delete(`${this.PATH}/:id`, this._onDelete.bind(this));
+        super._setupRoute();
     }
 }
 

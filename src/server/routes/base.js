@@ -12,6 +12,10 @@ class BaseRoute {
         this._setupRoute();
     }
 
+    getByIds(idStr) {
+        return this._doForEachId(idStr, this._getById.bind(this));
+    }
+
     create(data) {
         const model = new this.MODEL(data);
         return model.save();
@@ -21,8 +25,12 @@ class BaseRoute {
         return this._doForEachId(idStr, this._deleteOne.bind(this));
     }
 
-    getByIds(idStr) {
-        return this._doForEachId(idStr, this._getById.bind(this));
+    read() {
+        return this.MODEL.find();
+    }
+
+    update() {
+        return this._doForEachId(idStr, this._updateOne.bind(this));
     }
 
     generateResponse(res, promise) {
@@ -59,13 +67,15 @@ class BaseRoute {
         return {code, message, data};
     }
 
-    read() {
-        return this.MODEL.find();
+    _getById(id) {
+        return this.MODEL.findById(id);
     }
 
     _deleteOne(id) {
         return this.MODEL.findByIdAndRemove(id);
     }
+
+    _updateOne(id) {}
 
     _doForEachId(idStr, fn) {
         const ids = idStr.split(',');
@@ -95,10 +105,12 @@ class BaseRoute {
         return this.generateResponse(res, promise);
     }
 
-    _setupRoute() {}
-
-    _getById(id) {
-        return this.MODEL.findById(id);
+    _setupRoute() {
+        this._router.post(this.PATH, this._onCreate.bind(this));
+        this._router.get(this.PATH, this._onRead.bind(this));
+        this._router.get(`${this.PATH}/:id`, this._onGetByIds.bind(this));
+        this._router.delete(`${this.PATH}/:id`, this._onDelete.bind(this));
+        this._router.patch(`${this.PATH}/:id`, this._onUpdate.bind(this));
     }
 
     _onCreate(req, res) {
@@ -115,6 +127,10 @@ class BaseRoute {
 
     _onRead(req, res) {
         return this._handleRequest(res, this.read());
+    }
+
+    _onUpdate(req, res) {
+        return this._handleRequest(res, this.update(req.params.id));
     }
 }
 

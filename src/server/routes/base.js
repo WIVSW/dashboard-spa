@@ -1,4 +1,4 @@
-const { ObjectID } = require('mongodb');
+const idParser = require('../middleware/id-parser');
 
 
 
@@ -12,8 +12,8 @@ class BaseRoute {
         this._setupRoute();
     }
 
-    getByIds(idStr) {
-        return this._doForEachId(idStr, this._getById.bind(this));
+    getByIds(ids) {
+        return this._doForEachId(ids, this._getById.bind(this));
     }
 
     create(data) {
@@ -25,16 +25,16 @@ class BaseRoute {
             });
     }
 
-    delete(idStr) {
-        return this._doForEachId(idStr, this._deleteOne.bind(this));
+    delete(ids) {
+        return this._doForEachId(ids, this._deleteOne.bind(this));
     }
 
     read() {
         return this.MODEL.find();
     }
 
-    update(idStr, body) {
-        return this._doForEachId(idStr, (id) => this._updateOne(id, body));
+    update(ids, body) {
+        return this._doForEachId(ids, (id) => this._updateOne(id, body));
     }
 
     generateResponse(res, obj) {
@@ -68,14 +68,8 @@ class BaseRoute {
         return this.MODEL.findByIdAndUpdate(id, { $set: body[id] }, { new: true });
     }
 
-    _doForEachId(idStr, fn) {
-        const ids = idStr.split(',');
-        const promises = ids.map((id) => {
-            if (!ObjectID.isValid(id)) {
-                return Promise.resolve();
-            }
-            return fn(id);
-        });
+    _doForEachId(ids, fn) {
+        const promises = ids.map((id) => fn(id));
 
         return Promise
             .all(promises)
@@ -101,9 +95,9 @@ class BaseRoute {
     _setupRoute() {
         this._router.post(this.PATH, this._onCreate.bind(this));
         this._router.get(this.PATH, this._onRead.bind(this));
-        this._router.get(`${this.PATH}/:id`, this._onGetByIds.bind(this));
-        this._router.delete(`${this.PATH}/:id`, this._onDelete.bind(this));
-        this._router.patch(`${this.PATH}/:id`, this._onUpdate.bind(this));
+        this._router.get(`${this.PATH}/:id`, idParser, this._onGetByIds.bind(this));
+        this._router.delete(`${this.PATH}/:id`, idParser, this._onDelete.bind(this));
+        this._router.patch(`${this.PATH}/:id`, idParser, this._onUpdate.bind(this));
     }
 
     _onCreate(req, res) {

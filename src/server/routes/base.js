@@ -37,37 +37,22 @@ class BaseRoute {
         return this._doForEachId(idStr, (id) => this._updateOne(id, body));
     }
 
-    generateResponse(res, promise) {
-        return promise
-            .then(
-                (obj) => {
-                    let [ code, message, data ] = [ 200, 'OK',  {}];
+    generateResponse(res, obj) {
+        const { code, message, data } = obj;
 
-                    if (obj.code) code = obj.code;
-                    if (obj.message) message = obj.message;
-                    if (obj.data) data = obj.data;
-
-                    return res
-                        .status(code)
-                        .send({ message, data });
-                }
-            )
-            .catch(
-                (err) => {
-                    let [ code, message, data ] = [ 400, 'Bad request',  {}];
-
-                    if (err.code) code = err.code;
-                    if (err.message) message = err.message;
-                    if (err.data) data = err.data;
-
-                    return res
-                        .status(code)
-                        .send({ message, data })
-                }
-            );
+        return res
+            .status(code)
+            .send({ message, data });
     }
 
-    getResponseObject(data, code, message) {
+    getResponseObject(data, code, message, isSuccess) {
+        if (isSuccess === true) {
+            if (!code) code = 200;
+            if (!message) message = 'OK';
+        } else if (isSuccess === false) {
+            if (!code) code = 400;
+            if (!message) message = 'Bad request';
+        }
         return {code, message, data};
     }
 
@@ -105,10 +90,12 @@ class BaseRoute {
     }
 
     _handleRequest(res, promise) {
-        promise = promise
-            .then((user) => this.getResponseObject(user));
-
-        return this.generateResponse(res, promise);
+        return promise
+            .then(
+                (data) => this.getResponseObject(data, undefined, undefined, true),
+                (err) => this.getResponseObject(err.data, err.code, err.message, false)
+            )
+            .then((data) => this.generateResponse(res, data));
     }
 
     _setupRoute() {

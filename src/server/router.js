@@ -27,8 +27,10 @@ class Router {
     }
 
     _declareRoutes() {
-        this._addRoute(Public);
-        this._addRoute(User);
+        [
+            Public,
+            User
+        ].forEach((model) => this._addRoute(model));
     }
 }
 

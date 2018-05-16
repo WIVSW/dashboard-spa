@@ -55,6 +55,12 @@ const UserSchema = new Schema({
     }
 });
 
+UserSchema.methods.toJSON = function() {
+    const {_id, email, tokens, menus, ingredientsGroups} = this.toObject();
+
+    return {_id, email, tokens, menus, ingredientsGroups};
+};
+
 const User = mongoose.model('User', UserSchema);
 
 module.exports = User;

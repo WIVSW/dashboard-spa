@@ -18,7 +18,11 @@ class BaseRoute {
 
     create(data) {
         const model = new this.MODEL(data);
-        return model.save();
+        return model
+            .save()
+            .catch((err) => {
+                return Promise.reject(this.getResponseObject([], 400, err.message));
+            });
     }
 
     delete(idStr) {
@@ -29,8 +33,8 @@ class BaseRoute {
         return this.MODEL.find();
     }
 
-    update() {
-        return this._doForEachId(idStr, this._updateOne.bind(this));
+    update(idStr, body) {
+        return this._doForEachId(idStr, (id) => this._updateOne(id, body));
     }
 
     generateResponse(res, promise) {
@@ -75,7 +79,9 @@ class BaseRoute {
         return this.MODEL.findByIdAndRemove(id);
     }
 
-    _updateOne(id) {}
+    _updateOne(id, body) {
+        return this.MODEL.findByIdAndUpdate(id, { $set: body[id] }, { new: true });
+    }
 
     _doForEachId(idStr, fn) {
         const ids = idStr.split(',');
@@ -130,7 +136,7 @@ class BaseRoute {
     }
 
     _onUpdate(req, res) {
-        return this._handleRequest(res, this.update(req.params.id));
+        return this._handleRequest(res, this.update(req.params.id, req.body));
     }
 }
 

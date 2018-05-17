@@ -15,6 +15,21 @@ class UserRoute extends BaseRoute {
     _setupRoute() {
         super._setupRoute();
     }
+
+    create(data) {
+        const user = new this.MODEL(data);
+        let model;
+        return user
+            .save()
+            .then((doc) => {
+                model = doc;
+                return user.generateAuthToken()
+            })
+            .then(() => model)
+            .catch((err) => {
+                return Promise.reject(this.getResponseObject([], 400, err.message));
+            });
+    }
 }
 
 module.exports = UserRoute;

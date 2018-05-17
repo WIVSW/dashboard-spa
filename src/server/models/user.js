@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const jwt = require('jsonwebtoken');
 
 const { Schema } = mongoose;
 
@@ -54,6 +55,18 @@ const UserSchema = new Schema({
         }]
     }
 });
+
+UserSchema.methods.generateAuthToken = function() {
+    const _id = this._id.toHexString();
+    const access = 'auth';
+    const token = jwt.sign({_id, access}, 'abc123').toString();
+
+    this.tokens = this.tokens.concat([{access, token}]);
+
+    return this
+        .save()
+        .then(() => token);
+};
 
 UserSchema.methods.toJSON = function() {
     const {_id, email, tokens, menus, ingredientsGroups} = this.toObject();

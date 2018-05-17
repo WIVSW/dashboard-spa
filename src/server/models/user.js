@@ -69,9 +69,9 @@ UserSchema.methods.generateAuthToken = function() {
 };
 
 UserSchema.methods.toJSON = function() {
-    const {_id, email, tokens, menus, ingredientsGroups} = this.toObject();
+    const {_id, email, menus, ingredientsGroups} = this.toObject();
 
-    return {_id, email, tokens, menus, ingredientsGroups};
+    return {_id, email, menus, ingredientsGroups};
 };
 
 const User = mongoose.model('User', UserSchema);

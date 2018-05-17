@@ -16,8 +16,19 @@ const ProductSchema = new Schema({
     price: {
         type: Number,
         required: true
+    },
+    _creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 });
+
+ProductSchema.methods.toJSON = function() {
+    const {_id, name, ingredients, price} = this.toObject();
+
+    return {_id, name, ingredients, price};
+};
 
 const Product = mongoose.model('Product', ProductSchema);
 

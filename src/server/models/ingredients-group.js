@@ -12,8 +12,19 @@ const IngredientsGroupSchema = new Schema({
     ingredients: [{
         type: Schema.Types.ObjectId,
         ref: 'Ingredient'
-    }]
+    }],
+    _creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
+
+IngredientsGroupSchema.methods.toJSON = function() {
+    const {_id, name, ingredients} = this.toObject();
+
+    return {_id, name, ingredients};
+};
 
 const IngredientsGroup = mongoose.model('IngredientsGroup', IngredientsGroupSchema);
 

@@ -27,8 +27,19 @@ const IngredientSchema = new Schema({
     primecost: {
         type: Number,
         required: true
+    },
+    _creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 });
+
+IngredientSchema.methods.toJSON = function() {
+    const {_id, name, group, supplier, parameters, primecost} = this.toObject();
+
+    return {_id, name, group, supplier, parameters, primecost};
+};
 
 const Ingredient = mongoose.model('Ingredient', IngredientSchema);
 

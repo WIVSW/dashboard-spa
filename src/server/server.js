@@ -12,5 +12,5 @@ const router = new Router({app, router: express.Router()});
 connection.init();
 
 http
-    .createServer(app)
-    .listen(3000);
+	.createServer(app)
+	.listen(3000);

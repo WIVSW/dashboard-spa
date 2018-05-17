@@ -16,19 +16,27 @@ class UserRoute extends BaseRoute {
         super._setupRoute();
     }
 
-    create(data) {
-        const user = new this.MODEL(data);
-        let model;
-        return user
-            .save()
-            .then((doc) => {
-                model = doc;
-                return user.generateAuthToken()
+    _onCreate(req, res) {
+        let user;
+        return this
+            .create(req.body)
+            .then((data) => {
+                user = data;
+                return user.generateAuthToken();
             })
-            .then(() => model)
-            .catch((err) => {
-                return Promise.reject(this.getResponseObject([], 400, err.message));
-            });
+            .then((token) => {
+                return res
+                    .header('x-auth', token)
+                    .status(200)
+                    .send({message: 'OK', data: user});
+            })
+            .catch(
+                (err) =>
+                    this.generateResponse(
+                        res,
+                        this.getResponseObject([], 400, err.message)
+                    )
+            );
     }
 }
 

@@ -1,5 +1,6 @@
 const BaseRoute = require('./base');
 const UserModel = require('../models/user');
+const authenticate = require('../middleware/authenticate');
 
 
 
@@ -13,6 +14,8 @@ class UserRoute extends BaseRoute {
     }
 
     _setupRoute() {
+	    this._router.get(`${this.PATH}/me`, authenticate, this._onGetSelf.bind(this));
+
         super._setupRoute();
     }
 
@@ -37,6 +40,12 @@ class UserRoute extends BaseRoute {
                         this.getResponseObject([], 400, err.message)
                     )
             );
+    }
+
+    _onGetSelf(req, res) {
+        return res
+            .status(200)
+            .send({ message: 'OK', data: req.user });
     }
 }
 

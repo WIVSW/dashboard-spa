@@ -12,8 +12,19 @@ const MenuSchema = new Schema({
     products: [{
         type: Schema.Types.ObjectId,
         ref: 'Product'
-    }]
+    }],
+    _creator: {
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
+    }
 });
+
+MenuSchema.methods.toJSON = function() {
+    const {_id, name, products} = this.toObject();
+
+    return {_id, name, products};
+};
 
 const Menu = mongoose.model('Menu', MenuSchema);
 

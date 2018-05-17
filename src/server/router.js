@@ -2,6 +2,7 @@ const bodyParser = require('body-parser');
 
 const Public = require('./routes/public');
 const User = require('./routes/user');
+const Ingredient = require('./routes/ingredient');
 
 
 
@@ -29,7 +30,8 @@ class Router {
     _declareRoutes() {
         [
             Public,
-            User
+            User,
+            Ingredient
         ].forEach((model) => this._addRoute(model));
     }
 }

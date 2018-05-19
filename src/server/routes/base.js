@@ -34,8 +34,8 @@ class BaseRoute {
 			});
 	}
 
-	delete(ids) {
-		return this._doForEachId(ids, this._deleteOne.bind(this));
+	delete(ids, _creator) {
+		return this._doForEachId(ids, (id) => this._deleteOne(id, _creator));
 	}
 
 	read(body) {
@@ -77,12 +77,13 @@ class BaseRoute {
 		return this.MODEL.findOne({ _id, _creator });
 	}
 
-	_deleteOne(id) {
-		return this.MODEL.findByIdAndRemove(id);
+	_deleteOne(_id, _creator) {
+		return this.MODEL.findOneAndRemove({ _id, _creator });
 	}
 
-	_updateOne(id, body) {
-		return this.MODEL.findByIdAndUpdate(id, { $set: body[id] }, { new: true });
+	_updateOne(_id, body) {
+		const { _creator } = body;
+		return this.MODEL.findOneAndUpdate({ _id, _creator}, { $set: body[_id] }, { new: true });
 	}
 
 	_doForEachId(ids, fn) {
@@ -122,7 +123,7 @@ class BaseRoute {
 	}
 
 	_onDelete(req, res) {
-		return this._handleRequest(res, this.delete(req.params.id));
+		return this._handleRequest(res, this.delete(req.params.id, req.body._creator));
 	}
 
 	_onGetByIds(req, res) {

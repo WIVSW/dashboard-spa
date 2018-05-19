@@ -38,8 +38,9 @@ class BaseRoute {
 		return this._doForEachId(ids, this._deleteOne.bind(this));
 	}
 
-	read() {
-		return this.MODEL.find();
+	read(body) {
+		const { _creator } = body;
+		return this.MODEL.find({ _creator });
 	}
 
 	update(ids, body) {
@@ -129,7 +130,7 @@ class BaseRoute {
 	}
 
 	_onRead(req, res) {
-		return this._handleRequest(res, this.read());
+		return this._handleRequest(res, this.read(req.body));
 	}
 
 	_onUpdate(req, res) {

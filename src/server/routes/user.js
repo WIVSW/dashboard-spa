@@ -13,10 +13,14 @@ class UserRoute extends BaseRoute {
 		super({path, router, model});
 	}
 
-	_setupRoute() {
-		this._router.get(`${this.PATH}/me`, authenticate, this._onGetSelf.bind(this));
+	create(data) {
+		const model = new this.MODEL(data);
+		return model.save();
+	}
 
-		super._setupRoute();
+	_setupRoute() {
+		this._router.post(this.PATH, this._onCreate.bind(this));
+		this._router.get(`${this.PATH}/me`, authenticate, this._onGetSelf.bind(this));
 	}
 
 	_onCreate(req, res) {

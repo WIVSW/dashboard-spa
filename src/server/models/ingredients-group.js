@@ -9,10 +9,14 @@ const IngredientsGroupSchema = new Schema({
 		trim: true,
 		minLength: 1
 	},
-	ingredients: [{
-		type: Schema.Types.ObjectId,
-		ref: 'Ingredient'
-	}],
+	ingredients: {
+		type: Array,
+		default: [],
+		value: [{
+			type: Schema.Types.ObjectId,
+			ref: 'Ingredient'
+		}]
+	},
 	_creator: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',

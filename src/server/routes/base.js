@@ -1,4 +1,6 @@
 const idParser = require('../middleware/id-parser');
+const authenticate = require('../middleware/authenticate');
+const addCreator = require('../middleware/add-creator');
 
 
 
@@ -16,10 +18,17 @@ class BaseRoute {
 		return this._doForEachId(ids, this._getById.bind(this));
 	}
 
-	create(data) {
-		const model = new this.MODEL(data);
-		return model
-			.save()
+	create(body) {
+		const promises = body.map((data) => this._createOne(data));
+		return Promise
+			.all(promises)
+			.then((models) => {
+				const valid = models.filter((model) => !!model);
+				if (!valid.length) {
+					return Promise.reject();
+				}
+				return valid;
+			})
 			.catch((err) => {
 				return Promise.reject(this.getResponseObject([], 400, err.message));
 			});
@@ -54,6 +63,13 @@ class BaseRoute {
 			if (!message) message = 'Bad request';
 		}
 		return {code, message, data};
+	}
+
+	_createOne(data) {
+		const model = new this.MODEL(data);
+		return model
+			.save()
+			.catch(() => null);
 	}
 
 	_getById(id) {
@@ -93,11 +109,11 @@ class BaseRoute {
 	}
 
 	_setupRoute() {
-		this._router.post(this.PATH, this._onCreate.bind(this));
-		this._router.get(this.PATH, this._onRead.bind(this));
-		this._router.get(`${this.PATH}/:id`, idParser, this._onGetByIds.bind(this));
-		this._router.delete(`${this.PATH}/:id`, idParser, this._onDelete.bind(this));
-		this._router.patch(`${this.PATH}/:id`, idParser, this._onUpdate.bind(this));
+		this._router.post(this.PATH, authenticate, addCreator, this._onCreate.bind(this));
+		this._router.get(this.PATH, authenticate, addCreator, this._onRead.bind(this));
+		this._router.get(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onGetByIds.bind(this));
+		this._router.delete(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onDelete.bind(this));
+		this._router.patch(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onUpdate.bind(this));
 	}
 
 	_onCreate(req, res) {

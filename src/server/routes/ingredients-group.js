@@ -5,7 +5,7 @@ const IngredientsGroupModel = require('../models/ingredients-group');
 
 class IngredientRoute extends BaseRoute {
 	constructor(deps) {
-		const path = '/ingredients';
+		const path = '/ingredients-groups';
 		const { router } = deps;
 		const model = IngredientsGroupModel;
 

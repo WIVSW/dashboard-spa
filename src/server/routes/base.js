@@ -14,8 +14,8 @@ class BaseRoute {
 		this._setupRoute();
 	}
 
-	getByIds(ids) {
-		return this._doForEachId(ids, this._getById.bind(this));
+	getByIds(ids, _creator) {
+		return this._doForEachId(ids, (id) => this._getById(id, _creator));
 	}
 
 	create(body) {
@@ -73,8 +73,8 @@ class BaseRoute {
 			.catch(() => null);
 	}
 
-	_getById(id) {
-		return this.MODEL.findById(id);
+	_getById(_id, _creator) {
+		return this.MODEL.findOne({ _id, _creator });
 	}
 
 	_deleteOne(id) {
@@ -126,7 +126,7 @@ class BaseRoute {
 	}
 
 	_onGetByIds(req, res) {
-		return this._handleRequest(res, this.getByIds(req.params.id));
+		return this._handleRequest(res, this.getByIds(req.params.id, req.body._creator));
 	}
 
 	_onRead(req, res) {

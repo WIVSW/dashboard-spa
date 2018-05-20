@@ -21,6 +21,7 @@ class UserRoute extends BaseRoute {
 	_setupRoute() {
 		this._router.post(this.PATH, this._onCreate.bind(this));
 		this._router.get(`${this.PATH}/me`, authenticate, this._onGetSelf.bind(this));
+		this._router.post(`${this.PATH}/login`, this._onLogin.bind(this));
 	}
 
 	_onCreate(req, res) {
@@ -50,6 +51,32 @@ class UserRoute extends BaseRoute {
 		return res
 			.status(200)
 			.send({ message: 'OK', data: req.user });
+	}
+
+	_onLogin(req, res) {
+		const {email, password} = req.body;
+
+		if (!email || !password)
+			return res
+				.status(400)
+				.send({message: 'Bad Request', data: []});
+
+		return UserModel
+			.findByCredentials(email, password)
+			.then(
+				(user) => user
+					.generateAuthToken()
+					.then(
+						(token) => res
+							.header('x-auth', token)
+							.status(200)
+							.send({ message: 'OK', data: user })
+					)
+			)
+			.catch(() => res
+				.status(400)
+				.send({message: 'Invalid data', data: []})
+			);
 	}
 }
 

@@ -14,7 +14,7 @@ class IngredientRoute extends BaseRoute {
 	}
 
 	_addIgredientToGroup(id, group) {
-		if (group[0].ingredients.indexOf(id) === -1)
+		if (group[0].ingredients.indexOf(id) !== -1)
 			return Promise.resolve();
 
 		group[0].ingredients.push(id);
@@ -28,16 +28,44 @@ class IngredientRoute extends BaseRoute {
 			._hasAccessToGroup(data.group, data._creator)
 			.then((doc) => {
 				group = doc;
-				return super
-					._createOne(data)
-					.then((doc) => {
-						model = doc;
-						return doc;
-					})
+				return super._createOne(data);
 			})
-			.then((doc) => this._addIgredientToGroup(doc._id, group))
+			.then((doc) => {
+				model = doc;
+				return this._addIgredientToGroup(doc._id, group)
+			})
 			.then(() => model)
 			.catch(() => null)
+	}
+
+	_deleteIgredientFromGroup(ingredient) {
+		const _id = ingredient.group;
+		const { _creator } = ingredient;
+
+		return IngredientsGroupModel
+			.findOne({ _id, _creator })
+			.then((doc) => {
+				const _id = { ingredient };
+				const ingredients = doc.ingredients;
+				const i = ingredients.indexOf(_id);
+
+				if (i === -1)
+					return Promise.resolve();
+
+				ingredients.splice(i,1);
+
+				return IngredientsGroupModel.findByIdAndUpdate(doc._id, { $set: { ingredients} }, { new: true });
+			})
+			.then(() => ingredient);
+
+		//return IngredientsGroupModel.findByIdAndUpdate(group[0].id, { $set: { ingredients} }, { new: true });
+	}
+
+	_deleteOne(_id, _creator) {
+		return super
+			._deleteOne(_id, _creator)
+			.then((ingredient) => this._deleteIgredientFromGroup(ingredient))
+			.catch((err) => Promise.reject(err));
 	}
 
 	_hasAccessToGroup(_id, _creator) {

@@ -57,8 +57,6 @@ class IngredientRoute extends BaseRoute {
 				return IngredientsGroupModel.findByIdAndUpdate(doc._id, { $set: { ingredients} }, { new: true });
 			})
 			.then(() => ingredient);
-
-		//return IngredientsGroupModel.findByIdAndUpdate(group[0].id, { $set: { ingredients} }, { new: true });
 	}
 
 	_deleteOne(_id, _creator) {

@@ -24,13 +24,13 @@ class BaseRoute {
 			.all(promises)
 			.then((models) => {
 				const valid = models.filter((model) => !!model);
-				if (!valid.length) {
-					return Promise.reject();
-				}
+				if (!valid.length)
+					return Promise.reject({ message: 'No access'});
+
 				return valid;
 			})
 			.catch((err) => {
-				return Promise.reject(this.getResponseObject([], 400, err.message));
+				return Promise.reject(this.getResponseObject([], 403, err.message));
 			});
 	}
 

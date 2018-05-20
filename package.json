@@ -1,29 +1,30 @@
 {
-  "name": "dashboard-spa",
-  "version": "1.0.0",
-  "description": "This Dashboard app for small office tasks",
-  "main": "index.js",
-  "scripts": {
-	"serve": "nodemon src/server/server.js"
-  },
-  "repository": {
-	"type": "git",
-	"url": "git+https://github.com/WIVSW/dashboard-spa.git"
-  },
-  "author": "WIVSW",
-  "license": "ISC",
-  "bugs": {
-	"url": "https://github.com/WIVSW/dashboard-spa/issues"
-  },
-  "homepage": "https://github.com/WIVSW/dashboard-spa#readme",
-  "dependencies": {
-	"body-parser": "^1.18.2",
-	"express": "^4.16.3",
-	"jsonwebtoken": "^8.2.1",
-	"mongodb": "^3.1.0-beta4",
-	"mongoose": "^5.0.17"
-  },
-  "devDependencies": {
-	"nodemon": "^1.17.4"
-  }
+ "name": "dashboard-spa",
+ "version": "1.0.0",
+ "description": "This Dashboard app for small office tasks",
+ "main": "index.js",
+ "scripts": {
+  "serve": "nodemon src/server/server.js"
+ },
+ "repository": {
+  "type": "git",
+  "url": "git+https://github.com/WIVSW/dashboard-spa.git"
+ },
+ "author": "WIVSW",
+ "license": "ISC",
+ "bugs": {
+  "url": "https://github.com/WIVSW/dashboard-spa/issues"
+ },
+ "homepage": "https://github.com/WIVSW/dashboard-spa#readme",
+ "dependencies": {
+  "bcryptjs": "^2.4.3",
+  "body-parser": "^1.18.2",
+  "express": "^4.16.3",
+  "jsonwebtoken": "^8.2.1",
+  "mongodb": "^3.1.0-beta4",
+  "mongoose": "^5.0.17"
+ },
+ "devDependencies": {
+  "nodemon": "^1.17.4"
+ }
 }

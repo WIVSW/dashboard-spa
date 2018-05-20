@@ -84,6 +84,13 @@ class IngredientRoute extends BaseRoute {
 	_setupRoute() {
 		super._setupRoute();
 	}
+
+	_updateOne(_id, body) {
+		return this
+			._hasAccessToGroup(body[_id].group, body._creator)
+			.then(() => super._updateOne(body))
+			.catch(() => null)
+	}
 }
 
 module.exports = IngredientRoute;

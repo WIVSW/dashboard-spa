@@ -9,10 +9,14 @@ const MenuSchema = new Schema({
 		trim: true,
 		minLength: 1
 	},
-	products: [{
-		type: Schema.Types.ObjectId,
-		ref: 'Product'
-	}],
+	products: {
+		type: Array,
+		default: [],
+		value: {
+			type: Schema.Types.ObjectId,
+			ref: 'Product'
+		}
+	},
 	_creator: {
 		type: Schema.Types.ObjectId,
 		ref: 'User',

@@ -22,6 +22,7 @@ class UserRoute extends BaseRoute {
 		this._router.post(this.PATH, this._onCreate.bind(this));
 		this._router.get(`${this.PATH}/me`, authenticate, this._onGetSelf.bind(this));
 		this._router.post(`${this.PATH}/login`, this._onLogin.bind(this));
+		this._router.delete(`${this.PATH}/me/token`, authenticate, this._onDeleteToken.bind(this));
 	}
 
 	_onCreate(req, res) {
@@ -47,6 +48,15 @@ class UserRoute extends BaseRoute {
 			);
 	}
 
+	_onDeleteToken(req, res) {
+		return req.user
+			.removeToken(req.token)
+			.then(
+				() => this.generateResponse(res, this.getResponseObject([], 200, 'OK')),
+				() => this.generateResponse(res, this.getResponseObject([], 400, 'Bad request'))
+			);
+	}
+
 	_onGetSelf(req, res) {
 		return res
 			.status(200)
@@ -57,9 +67,10 @@ class UserRoute extends BaseRoute {
 		const {email, password} = req.body;
 
 		if (!email || !password)
-			return res
-				.status(400)
-				.send({message: 'Bad Request', data: []});
+			return this.generateResponse(
+				res,
+				this.getResponseObject([], 400, 'Bad request')
+			);
 
 		return UserModel
 			.findByCredentials(email, password)
@@ -73,9 +84,10 @@ class UserRoute extends BaseRoute {
 							.send({ message: 'OK', data: user })
 					)
 			)
-			.catch(() => res
-				.status(400)
-				.send({message: 'Invalid data', data: []})
+			.catch(() => this.generateResponse(
+					res,
+					this.getResponseObject([], 400, 'Invalid data')
+				)
 			);
 	}
 }

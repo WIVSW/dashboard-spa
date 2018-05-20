@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const { Schema } = mongoose;
 
@@ -37,22 +38,6 @@ const UserSchema = new Schema({
 				}
 			}
 		]
-	},
-	menus: {
-		type: Array,
-		default: [],
-		value: [{
-			type: Schema.Types.ObjectId,
-			ref: 'Menu'
-		}]
-	},
-	ingredientsGroups: {
-		type: Array,
-		default: [],
-		value: [{
-			type: Schema.Types.ObjectId,
-			ref: 'IngredientsGroup'
-		}]
 	}
 });
 
@@ -69,9 +54,8 @@ UserSchema.methods.generateAuthToken = function() {
 };
 
 UserSchema.methods.toJSON = function() {
-	const {_id, email, menus, ingredientsGroups} = this.toObject();
-
-	return {_id, email, menus, ingredientsGroups};
+	const {_id, email} = this.toObject();
+	return {_id, email};
 };
 
 UserSchema.statics.findByToken = function(token) {
@@ -89,6 +73,19 @@ UserSchema.statics.findByToken = function(token) {
 		'tokens.access': 'auth'
 	});
 };
+
+UserSchema.pre('save', function(next) {
+	if (this.isModified('password')) {
+		bcrypt.genSalt(10, (err, salt) =>
+			bcrypt.hash(this.password, salt, (err, hash) => {
+				this.password = hash;
+				next();
+			})
+		);
+	} else {
+		next();
+	}
+});
 
 const User = mongoose.model('User', UserSchema);
 

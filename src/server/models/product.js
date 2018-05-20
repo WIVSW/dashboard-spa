@@ -9,13 +9,17 @@ const ProductSchema = new Schema({
 		trim: true,
 		minLength: 1
 	},
-	ingredients: [{
-		type: Schema.Types.ObjectId,
-		ref: 'Ingredient'
-	}],
+	ingredients: {
+		type: Array,
+		default: [],
+		value: {
+			type: Schema.Types.ObjectId,
+			ref: 'Ingredient'
+		}
+	},
 	price: {
 		type: Number,
-		required: true
+		default: 0
 	},
 	_creator: {
 		type: Schema.Types.ObjectId,

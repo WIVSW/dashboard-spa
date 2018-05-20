@@ -5,6 +5,7 @@ const User = require('./routes/user');
 const Ingredient = require('./routes/ingredient');
 const IngredientsGroup = require('./routes/ingredients-group');
 const Menu = require('./routes/menu');
+const Product = require('./routes/product');
 
 
 
@@ -35,7 +36,8 @@ class Router {
 			User,
 			Ingredient,
 			IngredientsGroup,
-			Menu
+			Menu,
+			Product
 		].forEach((model) => this._addRoute(model));
 	}
 }

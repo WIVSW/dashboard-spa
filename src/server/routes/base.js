@@ -1,124 +1,142 @@
 const idParser = require('../middleware/id-parser');
+const authenticate = require('../middleware/authenticate');
+const addCreator = require('../middleware/add-creator');
 
 
 
 class BaseRoute {
-    constructor(deps) {
-        this.PATH = deps.path;
-        this.MODEL = deps.model;
+	constructor(deps) {
+		this.PATH = deps.path;
+		this.MODEL = deps.model;
 
-        this._router = deps.router;
+		this._router = deps.router;
 
-        this._setupRoute();
-    }
+		this._setupRoute();
+	}
 
-    getByIds(ids) {
-        return this._doForEachId(ids, this._getById.bind(this));
-    }
+	getByIds(ids, _creator) {
+		return this._doForEachId(ids, (id) => this._getById(id, _creator));
+	}
 
-    create(data) {
-        const model = new this.MODEL(data);
-        return model
-            .save()
-            .catch((err) => {
-                return Promise.reject(this.getResponseObject([], 400, err.message));
-            });
-    }
+	create(body) {
+		const promises = body.map((data) => this._createOne(data));
+		return Promise
+			.all(promises)
+			.then((models) => {
+				const valid = models.filter((model) => !!model);
+				if (!valid.length)
+					return Promise.reject({ message: 'No access'});
 
-    delete(ids) {
-        return this._doForEachId(ids, this._deleteOne.bind(this));
-    }
+				return valid;
+			})
+			.catch((err) => {
+				return Promise.reject(this.getResponseObject([], 403, err.message));
+			});
+	}
 
-    read() {
-        return this.MODEL.find();
-    }
+	delete(ids, _creator) {
+		return this._doForEachId(ids, (id) => this._deleteOne(id, _creator));
+	}
 
-    update(ids, body) {
-        return this._doForEachId(ids, (id) => this._updateOne(id, body));
-    }
+	read(body) {
+		const { _creator } = body;
+		return this.MODEL.find({ _creator });
+	}
 
-    generateResponse(res, obj) {
-        const { code, message, data } = obj;
+	update(ids, body) {
+		return this._doForEachId(ids, (id) => this._updateOne(id, body));
+	}
 
-        return res
-            .status(code)
-            .send({ message, data });
-    }
+	generateResponse(res, obj) {
+		const { code, message, data } = obj;
 
-    getResponseObject(data, code, message, isSuccess) {
-        if (isSuccess === true) {
-            if (!code) code = 200;
-            if (!message) message = 'OK';
-        } else if (isSuccess === false) {
-            if (!code) code = 400;
-            if (!message) message = 'Bad request';
-        }
-        return {code, message, data};
-    }
+		return res
+			.status(code)
+			.send({ message, data });
+	}
 
-    _getById(id) {
-        return this.MODEL.findById(id);
-    }
+	getResponseObject(data, code, message, isSuccess) {
+		if (isSuccess === true) {
+			if (!code) code = 200;
+			if (!message) message = 'OK';
+		} else if (isSuccess === false) {
+			if (!code) code = 400;
+			if (!message) message = 'Bad request';
+		}
+		return {code, message, data};
+	}
 
-    _deleteOne(id) {
-        return this.MODEL.findByIdAndRemove(id);
-    }
+	_createOne(data) {
+		const model = new this.MODEL(data);
+		return model
+			.save()
+			.catch(() => null);
+	}
 
-    _updateOne(id, body) {
-        return this.MODEL.findByIdAndUpdate(id, { $set: body[id] }, { new: true });
-    }
+	_getById(_id, _creator) {
+		return this.MODEL.findOne({ _id, _creator });
+	}
 
-    _doForEachId(ids, fn) {
-        const promises = ids.map((id) => fn(id));
+	_deleteOne(_id, _creator) {
+		return this.MODEL.findOneAndRemove({ _id, _creator });
+	}
 
-        return Promise
-            .all(promises)
-            .then((data) => {
-                const valid = data.filter(data => !!data);
+	_updateOne(_id, body) {
+		const { _creator } = body;
+		return this.MODEL.findOneAndUpdate({ _id, _creator}, { $set: body[_id] }, { new: true });
+	}
 
-                if (!valid.length)
-                    return Promise.reject(this.getResponseObject([], 404, 'Not Found'));
+	_doForEachId(ids, fn) {
+		const promises = ids.map((id) => fn(id));
 
-                return valid;
-            })
-    }
+		return Promise
+			.all(promises)
+			.then((data) => {
+				const valid = data.filter(data => !!data);
 
-    _handleRequest(res, promise) {
-        return promise
-            .then(
-                (data) => this.getResponseObject(data, undefined, undefined, true),
-                (err) => this.getResponseObject(err.data, err.code, err.message, false)
-            )
-            .then((data) => this.generateResponse(res, data));
-    }
+				if (!valid.length)
+					return Promise.reject(this.getResponseObject([], 404, 'Not Found'));
 
-    _setupRoute() {
-        this._router.post(this.PATH, this._onCreate.bind(this));
-        this._router.get(this.PATH, this._onRead.bind(this));
-        this._router.get(`${this.PATH}/:id`, idParser, this._onGetByIds.bind(this));
-        this._router.delete(`${this.PATH}/:id`, idParser, this._onDelete.bind(this));
-        this._router.patch(`${this.PATH}/:id`, idParser, this._onUpdate.bind(this));
-    }
+				return valid;
+			})
+	}
 
-    _onCreate(req, res) {
-        return this._handleRequest(res, this.create(req.body));
-    }
+	_handleRequest(res, promise) {
+		return promise
+			.then(
+				(data) => this.getResponseObject(data, undefined, undefined, true),
+				(err) => this.getResponseObject(err.data, err.code, err.message, false)
+			)
+			.then((data) => this.generateResponse(res, data));
+	}
 
-    _onDelete(req, res) {
-        return this._handleRequest(res, this.delete(req.params.id));
-    }
+	_setupRoute() {
+		this._router.post(this.PATH, authenticate, addCreator, this._onCreate.bind(this));
+		this._router.get(this.PATH, authenticate, addCreator, this._onRead.bind(this));
+		this._router.get(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onGetByIds.bind(this));
+		this._router.delete(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onDelete.bind(this));
+		this._router.patch(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onUpdate.bind(this));
+	}
 
-    _onGetByIds(req, res) {
-        return this._handleRequest(res, this.getByIds(req.params.id));
-    }
+	_onCreate(req, res) {
+		return this._handleRequest(res, this.create(req.body));
+	}
 
-    _onRead(req, res) {
-        return this._handleRequest(res, this.read());
-    }
+	_onDelete(req, res) {
+		return this._handleRequest(res, this.delete(req.params.id, req.body._creator));
+	}
 
-    _onUpdate(req, res) {
-        return this._handleRequest(res, this.update(req.params.id, req.body));
-    }
+	_onGetByIds(req, res) {
+		return this._handleRequest(res, this.getByIds(req.params.id, req.body._creator));
+	}
+
+	_onRead(req, res) {
+		return this._handleRequest(res, this.read(req.body));
+	}
+
+	_onUpdate(req, res) {
+		return this._handleRequest(res, this.update(req.params.id, req.body));
+	}
 }
 
 module.exports = BaseRoute;

@@ -26,6 +26,9 @@
   "mongoose": "^5.0.17"
  },
  "devDependencies": {
+  "babel-core": "^6.26.3",
+  "babel-loader": "^7.1.4",
+  "babel-preset-env": "^1.7.0",
   "nodemon": "^1.17.4",
   "webpack": "^4.8.3",
   "webpack-cli": "^2.1.4"

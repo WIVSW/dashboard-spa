@@ -7,5 +7,13 @@ module.exports = {
 	output: {
 		path: path.resolve(__dirname, 'src/public'),
 		filename: "index.js"
+	},
+	module: {
+		rules: [
+			{
+				use: 'babel-loader',
+				test: /\.js$/
+			}
+		]
 	}
 };

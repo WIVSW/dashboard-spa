@@ -5,7 +5,8 @@
  "main": "index.js",
  "scripts": {
   "build": "export NODE_ENV=production && webpack --mode=production",
-  "serve": "nodemon src/server/server.js"
+  "start:server": "nodemon src/server/server.js",
+  "start:ui": "export NODE_ENV=development && webpack-dev-server --port 9000 --mode=development"
  },
  "repository": {
   "type": "git",

@@ -1,19 +1,3 @@
-const path = require('path');
+const config = require(`./webpack.${process.env.NODE_ENV}.config`);
 
-
-
-module.exports = {
-	entry: './src/ui/index.js',
-	output: {
-		path: path.resolve(__dirname, 'src/public'),
-		filename: "index.js"
-	},
-	module: {
-		rules: [
-			{
-				use: 'babel-loader',
-				test: /\.js$/
-			}
-		]
-	}
-};
+module.exports = config;

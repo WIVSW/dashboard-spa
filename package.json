@@ -4,7 +4,7 @@
  "description": "This Dashboard app for small office tasks",
  "main": "index.js",
  "scripts": {
-  "build": "webpack --mode=production",
+  "build": "export NODE_ENV=production && webpack --mode=production",
   "serve": "nodemon src/server/server.js"
  },
  "repository": {

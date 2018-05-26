@@ -1,3 +1,4 @@
+const webpack = require('webpack');
 const path = require('path');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
@@ -5,10 +6,24 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 
 module.exports = {
-	entry: './src/ui/index.js',
+	entry: {
+		index:'./src/ui/index.js',
+		vendor: ['react', 'react-dom']
+	},
 	output: {
 		path: path.resolve(__dirname, 'src/public'),
-		filename: "index.js"
+		filename: "[name].[chunkhash].js"
+	},
+	optimization: {
+		splitChunks: {
+			cacheGroups: {
+				commons: {
+					test: /[\\/]node_modules[\\/]/,
+					name: "vendor",
+					chunks: "all"
+				}
+			}
+		}
 	},
 	module: {
 		rules: [
@@ -46,6 +61,6 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new ExtractTextPlugin("index.[chunkhash].css"),
+		new ExtractTextPlugin("index.[chunkhash].css")
 	]
 };

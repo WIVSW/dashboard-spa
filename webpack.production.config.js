@@ -13,7 +13,7 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'src/public'),
-		filename: "[name].[chunkhash].js"
+		filename: "js/[name].[chunkhash].js"
 	},
 	optimization: {
 		splitChunks: {
@@ -62,7 +62,7 @@ module.exports = {
 		]
 	},
 	plugins: [
-		new ExtractTextPlugin("index.[chunkhash].css"),
+		new ExtractTextPlugin("css/index.[chunkhash].css"),
 		new HtmlWebpackPlugin({
 			template: 'src/ui/index.html'
 		}),

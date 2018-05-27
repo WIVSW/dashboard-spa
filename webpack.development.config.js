@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack');
 const autoprefixer = require('autoprefixer');
 const cssnano = require('cssnano');
 const ExtractTextPlugin = require('extract-text-webpack-plugin');
@@ -13,7 +14,7 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'src/public'),
-		filename: "js/[name].[chunkhash].js"
+		filename: "js/[name].[hash].js"
 	},
 	optimization: {
 		minimize: false,
@@ -57,11 +58,26 @@ module.exports = {
 			}
 		]
 	},
+	devServer: {
+		historyApiFallback: true,
+		hot: true,
+		inline: true,
+
+		host: '192.168.0.103', // Defaults to `localhost`
+		port: 9000, // Defaults to 8080
+		proxy: {
+			'/**': {
+				target: 'http://localhost:3000/',
+				secure: false
+			}
+		}
+	},
 	plugins: [
-		new ExtractTextPlugin("css/index.[chunkhash].css"),
+		new ExtractTextPlugin("css/index.[hash].css"),
 		new HtmlWebpackPlugin({
 			template: 'src/ui/index.html'
 		}),
-		new CleanWebpackPlugin('src/public/*.*')
+		new CleanWebpackPlugin('src/public/*.*'),
+		new webpack.HotModuleReplacementPlugin()
 	]
 };

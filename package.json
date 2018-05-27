@@ -6,7 +6,7 @@
  "scripts": {
   "build": "export NODE_ENV=production && webpack --mode=production",
   "start:server": "nodemon src/server/server.js",
-  "start:ui": "export NODE_ENV=development && webpack-dev-server --port 9000 --mode=development"
+  "start:ui": "export NODE_ENV=development && webpack-dev-server --mode=development"
  },
  "repository": {
   "type": "git",

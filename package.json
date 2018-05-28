@@ -4,7 +4,9 @@
  "description": "This Dashboard app for small office tasks",
  "main": "index.js",
  "scripts": {
-  "serve": "nodemon src/server/server.js"
+  "build": "export NODE_ENV=production && webpack --mode=production",
+  "start:server": "nodemon src/server/server.js",
+  "start:ui": "export NODE_ENV=development && webpack-dev-server --mode=development"
  },
  "repository": {
   "type": "git",
@@ -25,6 +27,26 @@
   "mongoose": "^5.0.17"
  },
  "devDependencies": {
-  "nodemon": "^1.17.4"
+  "autoprefixer": "^8.5.1",
+  "babel-core": "^6.26.3",
+  "babel-loader": "^7.1.4",
+  "babel-preset-env": "^1.7.0",
+  "babel-preset-react": "^6.24.1",
+  "clean-webpack-plugin": "^0.1.19",
+  "css-loader": "^0.28.11",
+  "cssnano": "^3.10.0",
+  "extract-text-webpack-plugin": "^4.0.0-beta.0",
+  "html-webpack-plugin": "^3.2.0",
+  "node-sass": "^4.9.0",
+  "nodemon": "^1.17.4",
+  "postcss-loader": "^2.1.5",
+  "react": "^16.4.0",
+  "react-dom": "^16.4.0",
+  "react-router": "^4.2.0",
+  "sass-loader": "^7.0.1",
+  "style-loader": "^0.21.0",
+  "webpack": "^4.8.3",
+  "webpack-cli": "^2.1.4",
+  "webpack-dev-server": "^3.1.4"
  }
 }

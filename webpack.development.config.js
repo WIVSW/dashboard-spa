@@ -59,10 +59,6 @@ module.exports = {
 		]
 	},
 	devServer: {
-		historyApiFallback: true,
-		hot: true,
-		inline: true,
-
 		host: '192.168.0.103', // Defaults to `localhost`
 		port: 9000, // Defaults to 8080
 		proxy: {

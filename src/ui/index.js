@@ -1,13 +1,11 @@
-import './index.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+import Router from './router.jsx';
 
 
 const App = () => (
-	<div>
-		Welcome to React
-	</div>
+	<Router/>
 );
 
 

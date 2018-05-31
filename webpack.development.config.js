@@ -14,7 +14,8 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'src/public'),
-		filename: "js/[name].[hash].js"
+		filename: "js/[name].[hash].js",
+		publicPath: '/',
 	},
 	optimization: {
 		minimize: false,
@@ -62,18 +63,18 @@ module.exports = {
 		host: '192.168.0.103', // Defaults to `localhost`
 		port: 9000, // Defaults to 8080
 		proxy: {
-			'/**': {
+			'/api': {
 				target: 'http://localhost:3000/',
 				secure: false
 			}
 		}
 	},
 	plugins: [
+		new CleanWebpackPlugin('src/public/*.*'),
 		new ExtractTextPlugin("css/index.[hash].css"),
 		new HtmlWebpackPlugin({
 			template: 'src/ui/index.html'
 		}),
-		new CleanWebpackPlugin('src/public/*.*'),
 		new webpack.HotModuleReplacementPlugin()
 	]
 };

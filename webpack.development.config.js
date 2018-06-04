@@ -62,6 +62,7 @@ module.exports = {
 	devServer: {
 		host: '192.168.0.103', // Defaults to `localhost`
 		port: 9000, // Defaults to 8080
+		historyApiFallback: true,
 		proxy: {
 			'/api': {
 				target: 'http://localhost:3000/',
@@ -70,7 +71,6 @@ module.exports = {
 		}
 	},
 	plugins: [
-		new CleanWebpackPlugin('src/public/*.*'),
 		new ExtractTextPlugin("css/index.[hash].css"),
 		new HtmlWebpackPlugin({
 			template: 'src/ui/index.html'

@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter, Route, Switch } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
+
+import Layout from './layout';
 
 import Home from './pages/home/home';
 import Products from './pages/products/products';
@@ -13,7 +15,7 @@ import NotFound from './pages/not-found/not-found';
 
 
 export default () => (
-	<BrowserRouter>
+	<Layout>
 		<Switch>
 			<Route path="/products/" component={Products}/>
 			<Route path="/tables/:id" component={Table}/>
@@ -24,5 +26,5 @@ export default () => (
 			<Route path="/" exact component={Home}/>
 			<Route component={NotFound}/>
 		</Switch>
-	</BrowserRouter>
+	</Layout>
 );

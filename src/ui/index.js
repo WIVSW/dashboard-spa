@@ -6,11 +6,11 @@ import './base.scss';
 import Router from './router.jsx';
 
 
-const App = () => (
+const App = (props) => (
 	<BrowserRouter>
-		<Router/>
+		<Router {...props} />
 	</BrowserRouter>
 );
 
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<App isAuth={true}/>, document.getElementById('root'));

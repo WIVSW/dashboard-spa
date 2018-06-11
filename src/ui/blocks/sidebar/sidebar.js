@@ -10,10 +10,6 @@ export default class extends PureComponent {
 		this.template = <Template/>;
 	}
 
-	componentWillMount() {
-		console.log('Mount');
-	}
-
 	render() {
 		return this.template;
 	}

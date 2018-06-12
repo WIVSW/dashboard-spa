@@ -1,0 +1,23 @@
+.table {
+	width: 100%;
+	border-spacing: 0;
+
+	&__row {
+		height: 70px;
+		background-color: #f7f9ff;
+
+		&:nth-child(even) {
+			background-color: #fff;
+		}
+	}
+
+	&__head {
+		background-color: #edeff2;
+	}
+	
+	&__cell {
+		text-align: left;
+		padding: 0 15px;
+		color: #000;
+	}
+}

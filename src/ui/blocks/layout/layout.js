@@ -1,15 +1,15 @@
 import React, { PureComponent } from 'react';
 
-import Sidebar from '../sidebar/sidebar';
+import Sidebar from '../sidebar/sidebar.jsx';
 import './layout.scss'
 
 
 export default class extends PureComponent {
 	render() {
 		return (
-			<div className="wrap">
+			<div className="layout">
 				{ this._getSidebar() }
-				<div className="content">
+				<div className="main layout__column">
 					{this.props.children}
 				</div>
 			</div>

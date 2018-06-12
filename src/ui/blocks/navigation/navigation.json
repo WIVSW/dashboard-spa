@@ -2,21 +2,21 @@
 	{
 		"url": "/",
 		"name": "Home",
-		"icon": "fa-home"
+		"icon": "icon-home"
 	},
 	{
 		"url": "/tables/",
 		"name": "Tables",
-		"icon": "fa-table"
+		"icon": "icon-table"
 	},
 	{
 		"url": "/menus/",
 		"name": "Menus",
-		"icon": "fa-folder-open"
+		"icon": "icon-folder-open"
 	},
 	{
 		"url": "/products/",
 		"name": "Products",
-		"icon": "fa-cutlery"
+		"icon": "icon-restaurant"
 	}
 ]

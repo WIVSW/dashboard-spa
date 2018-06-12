@@ -1,8 +1,15 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import {NavLink} from 'react-router-dom';
 
 export default (props) => {
 	return (
-		<Link to={props.url} className={`navigation__link fa ${props.icon}`}>{props.name}</Link>
+		<NavLink
+			to={props.url}
+			activeClassName="navigation__link_selected"
+			className={`navigation__link fa ${props.icon}`}
+			exact={props.exact}
+		>
+			{props.name}
+		</NavLink>
 	)
 };

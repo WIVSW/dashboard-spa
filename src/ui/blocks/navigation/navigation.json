@@ -2,21 +2,25 @@
 	{
 		"url": "/",
 		"name": "Home",
-		"icon": "icon-home"
+		"icon": "icon-home",
+		"exact": true
 	},
 	{
 		"url": "/tables/",
 		"name": "Tables",
-		"icon": "icon-table"
+		"icon": "icon-table",
+		"exact": false
 	},
 	{
 		"url": "/menus/",
 		"name": "Menus",
-		"icon": "icon-folder-open"
+		"icon": "icon-folder-open",
+		"exact": false
 	},
 	{
 		"url": "/products/",
 		"name": "Products",
-		"icon": "icon-restaurant"
+		"icon": "icon-restaurant",
+		"exact": false
 	}
 ]

@@ -21,13 +21,13 @@ export default (props) => {
 	return (
 		<Layout showSidebar={props.isAuth}>
 			<Switch>
-				<Route path="/products/" component={() => authCheck(<Products/>)}/>
-				<Route path="/tables/:id" component={() => authCheck(<Table/>)}/>
-				<Route path="/tables/" component={() => authCheck(<Tables/>)}/>
+				<Route path="/products/" component={(props) => authCheck(<Products {...props}/>)}/>
+				<Route path="/tables/:id" component={(props) => authCheck(<Table {...props}/>)}/>
+				<Route path="/tables/" component={(props) => authCheck(<Tables {...props}/>)}/>
 				<Route path="/login/" component={Login}/>
-				<Route path="/menus/:id" component={() => authCheck(<Menu/>)}/>
-				<Route path="/menus/" component={() => authCheck(<Menus/>)}/>
-				<Route path="/" exact component={() => authCheck(<Home/>)}/>
+				<Route path="/menus/:id" component={(props) => authCheck(<Menu {...props}/>)}/>
+				<Route path="/menus/" component={(props) => authCheck(<Menus {...props}/>)}/>
+				<Route path="/" exact component={(props) => authCheck(<Home {...props}/>)}/>
 				<Route component={NotFound}/>
 			</Switch>
 		</Layout>

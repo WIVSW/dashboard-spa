@@ -1,0 +1,22 @@
+[
+	{
+		"url": "/",
+		"name": "Home",
+		"icon": "fa-home"
+	},
+	{
+		"url": "/tables/",
+		"name": "Tables",
+		"icon": "fa-table"
+	},
+	{
+		"url": "/menus/",
+		"name": "Menus",
+		"icon": "fa-folder-open"
+	},
+	{
+		"url": "/products/",
+		"name": "Products",
+		"icon": "fa-cutlery"
+	}
+]

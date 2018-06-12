@@ -1,7 +1,7 @@
 import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import Layout from './layout';
+import Layout from './blocks/layout/layout';
 
 import Home from './pages/home/home';
 import Products from './pages/products/products';

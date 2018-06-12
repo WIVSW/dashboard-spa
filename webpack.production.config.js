@@ -58,7 +58,9 @@ module.exports = {
 						{ loader: 'sass-loader' }
 					]
 				})
-			}
+			},
+			{ test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: "url-loader" },
+			{ test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: "url-loader" }
 		]
 	},
 	plugins: [

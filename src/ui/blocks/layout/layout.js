@@ -1,12 +1,11 @@
 import React, { PureComponent } from 'react';
 
-import Sidebar from './blocks/sidebar/sidebar';
-
+import Sidebar from '../sidebar/sidebar';
+import './layout.scss'
 
 
 export default class extends PureComponent {
 	render() {
-		console.log(this.props);
 		return (
 			<div className="wrap">
 				{ this._getSidebar() }

@@ -3,7 +3,6 @@ import React from 'react';
 import './table.scss';
 
 export default (props) => {
-	console.log(props);
 	return (
 		<table className="table">
 			<tbody>

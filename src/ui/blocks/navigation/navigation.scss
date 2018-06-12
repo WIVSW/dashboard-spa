@@ -1,6 +1,9 @@
 .navigation {
 	display: block;
 	width: 100%;
+	position: absolute;
+	top: 50%;
+	transform: translate(0, -50%);
 
 	&__link {
 		display: block;

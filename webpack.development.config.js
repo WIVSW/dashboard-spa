@@ -73,7 +73,7 @@ module.exports = {
 		}
 	},
 	plugins: [
-		new ExtractTextPlugin("css/index.[hash].css"),
+		new ExtractTextPlugin("css/[name].[hash].css"),
 		new HtmlWebpackPlugin({
 			template: 'src/ui/index.html'
 		}),

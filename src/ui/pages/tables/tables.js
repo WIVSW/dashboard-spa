@@ -1,10 +1,21 @@
 import React, { PureComponent } from 'react';
-import Table from '../../blocks/table/table.jsx';
+import TableFilterable from '../../blocks/table-filterable/table-filterable.jsx';
 
 
 
 export default class extends PureComponent {
 	render() {
+		const filters = [
+			{
+				id: 123,
+				name: 'Дочка молочника'
+			},
+			{
+				id: 23,
+				name: 'Кубинская плантация'
+			}
+		];
+
 		const table = {
 			head: [
 				'Название',
@@ -15,17 +26,17 @@ export default class extends PureComponent {
 				{
 					Название: 'Cырный раф',
 					Описание: 'Очень вкусный напиток',
-					Цена: 123
+					Цена: 123,
+					supplier: 123
 				},
 				{
 					Название: 'Горячий шоколад',
 					Описание: 'Очень вкусный напиток',
-					Цена: 666.06
+					Цена: 666.06,
+					supplier: 23
 				}
 			]
 		};
-		return (
-			<Table table={table}/>
-		);
+		return <TableFilterable filters={filters} table={table}/>;
 	}
 }

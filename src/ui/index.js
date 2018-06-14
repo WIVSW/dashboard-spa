@@ -15,4 +15,4 @@ const App = (props) => (
 );
 
 
-ReactDOM.render(<App isAuth={true}/>, document.getElementById('root'));
+ReactDOM.render(<App isAuth={false}/>, document.getElementById('root'));

@@ -10,7 +10,9 @@ export default class extends PureComponent {
 			<div className="layout">
 				{ this._getSidebar() }
 				<div className="main layout__column">
-					{this.props.children}
+					<div className="main__content">
+						{this.props.children}
+					</div>
 				</div>
 			</div>
 		);

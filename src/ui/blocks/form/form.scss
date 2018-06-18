@@ -1,0 +1,53 @@
+.form {
+	display: block;
+	width: 100%;
+	
+	&__input {
+		display: block;
+		width: 100%;
+		background-color: #e2e6ef;
+		color: #000;
+		border: none;
+		outline: none;
+		margin: 10px 0;
+		font-size: 16px;
+		padding: 15px 20px;
+		border-radius: 30px;
+	}
+
+	&__btn {
+		display: block;
+		float: right;
+		background-color: #f98700;
+		color: #fff;
+		font-family: inherit;
+		padding: 15px 20px;
+		font-size: 16px;
+		border: none;
+		cursor: pointer;
+		border-radius: 30px;
+
+		&_disabled {
+			background-color: #e2e6ef;
+			color: #828999;
+		}
+	}
+
+	&__error-message {
+		color: red;
+	}
+
+	&_clearfix {
+		zoom: 1;
+
+		&:before,
+		&:after {
+			content: "";
+			display: table;
+		}
+
+		&:after {
+			clear: both;
+		}
+	}
+}

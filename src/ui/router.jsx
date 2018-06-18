@@ -24,7 +24,7 @@ export default (props) => {
 				<Route path="/products/" component={(props) => authCheck(<Products {...props}/>)}/>
 				<Route path="/tables/:id" component={(props) => authCheck(<Table {...props}/>)}/>
 				<Route path="/tables/" component={(props) => authCheck(<Tables {...props}/>)}/>
-				<Route path="/login/" component={Login}/>
+				<Route path="/login/" component={Login} isAuth={props.isAuth}/>
 				<Route path="/menus/:id" component={(props) => authCheck(<Menu {...props}/>)}/>
 				<Route path="/menus/" component={(props) => authCheck(<Menus {...props}/>)}/>
 				<Route path="/" exact component={(props) => authCheck(<Home {...props}/>)}/>

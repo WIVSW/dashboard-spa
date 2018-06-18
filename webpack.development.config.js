@@ -62,7 +62,7 @@ module.exports = {
 		]
 	},
 	devServer: {
-		host: '192.168.0.104', // Defaults to `localhost`
+		host: '192.168.0.103', // Defaults to `localhost`
 		port: 9000, // Defaults to 8080
 		historyApiFallback: true,
 		proxy: {

@@ -5,6 +5,7 @@ import { BrowserRouter } from 'react-router-dom';
 import './base.scss';
 import './fonts/fontello/fontello.scss';
 import './fonts/SourceSansPro/SourceSansPro.scss'
+import './fonts/spin/spin.scss';
 import Router from './router.jsx';
 import Application from './application';
 

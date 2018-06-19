@@ -36,11 +36,13 @@ export default class extends PureComponent {
 		);
 	}
 
-	_onLogin(e) {
-		console.log('LOGIN', e);
+	_onLogin(data) {
+		console.log('LOGIN', data);
+		return this._userApi.login(data);
 	}
 
-	_onSignUp(e) {
-		console.log('SIGN UP', e);
+	_onSignUp(data) {
+		console.log('SIGN UP', data);
+		return this._userApi.signup(data);
 	}
 };

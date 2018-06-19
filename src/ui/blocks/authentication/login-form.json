@@ -3,6 +3,7 @@
 	"inputs": [
 		{
 			"name": "email",
+			"export": true,
 			"valid": false,
 			"placeholder": "Type your email here",
 			"type": "email",
@@ -19,6 +20,7 @@
 		},
 		{
 			"name": "password",
+			"export": true,
 			"valid": false,
 			"placeholder": "Type your password here",
 			"type": "password",

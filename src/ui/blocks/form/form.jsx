@@ -9,7 +9,7 @@ class Form extends PureComponent {
 
 		this.props = props;
 		this.state = props.form;
-		this.state.status = undefined;
+		this.state.status = Form.Status.INVALID;
 		this.state.errors = [];
 	}
 
@@ -20,7 +20,7 @@ class Form extends PureComponent {
 					{
 						this.state.errors.map(
 							(message, i) => (
-								message.length ?
+								message && message.length ?
 									<p key={i} className="form__error-message">{message}</p> :
 									null
 							)
@@ -60,7 +60,32 @@ class Form extends PureComponent {
 		if (!this._canSubmit())
 			return;
 
-		this.props.onSubmit(e);
+		this.setState({ status: Form.Status.WAITING });
+
+		this.props
+			.onSubmit(this._getFormData())
+			.then(
+				() => {
+					this.setState({ status: Form.Status.VALID });
+				},
+				(err) => {
+					this.setState({
+						status: Form.Status.INVALID,
+						errors: [ err ]
+					});
+				}
+			);
+	}
+
+	_getFormData() {
+		const data = {};
+
+		this.state.inputs.forEach((input) => {
+			if (input.export)
+				data[input.name] = input.value
+		});
+
+		return data;
 	}
 
 	_canSubmit() {
@@ -119,7 +144,7 @@ Form.Status = {
 Form.BtnClasses = {
 	'0': 'form__btn_disabled',
 	'1': '',
-	'2': 'form__btn_loading'
+	'2': 'icon-spin form__btn_loading'
 };
 
 

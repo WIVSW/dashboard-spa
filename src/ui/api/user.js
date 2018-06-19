@@ -4,7 +4,7 @@ import Api from './base';
 
 class User extends Api {
 	constructor(deps) {
-		const path = '/users/';
+		const path = '/users';
 		 super({
 			 network: deps.network,
 			 path

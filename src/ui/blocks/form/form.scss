@@ -26,10 +26,23 @@
 		border: none;
 		cursor: pointer;
 		border-radius: 30px;
+		position: relative;
+		overflow: hidden;
 
 		&_disabled {
 			background-color: #e2e6ef;
 			color: #828999;
+		}
+
+		&_loading {
+			background-color: #fff;
+			cursor: default;
+			&:before {
+				color: #828999;
+				position: absolute;
+				left: 40%;
+				top: 40%;
+			}
 		}
 	}
 

@@ -10,7 +10,14 @@ import SignUpForm from './signup-form.json';
 
 
 export default class extends PureComponent {
+	constructor(props) {
+		super(props);
+
+		this._userApi = this.props.userApi;
+	}
+
 	render() {
+		console.log(this.props);
 		return (
 			<div className="auth">
 				<Tabs className='auth__tabs' selectedTabClassName='auth__tab_selected' selectedTabPanelClassName='auth__tab-panel_selected'>

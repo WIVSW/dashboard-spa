@@ -19,7 +19,7 @@ export default class extends PureComponent {
 	}
 
 	_getSidebar() {
-		if (!this.props.showSidebar)
+		if (!this.props.userApi.isAuth())
 			return null;
 
 		return <Sidebar/>;

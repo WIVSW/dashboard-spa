@@ -6,7 +6,9 @@ import './base.scss';
 import './fonts/fontello/fontello.scss';
 import './fonts/SourceSansPro/SourceSansPro.scss'
 import Router from './router.jsx';
+import Application from './application';
 
+const app = new Application();
 
 const App = (props) => (
 	<BrowserRouter>
@@ -15,4 +17,4 @@ const App = (props) => (
 );
 
 
-ReactDOM.render(<App isAuth={false}/>, document.getElementById('root'));
+ReactDOM.render(<App api={app.api}/>, document.getElementById('root'));

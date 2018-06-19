@@ -15,16 +15,19 @@ import NotFound from './pages/not-found/not-found';
 
 
 export default (props) => {
-	const authCheck = (component) => props.isAuth ?
+	const authCheck = (component) => props.api.user.isAuth() ?
 		component : <Redirect to="/login/" />;
 
+	const needLoginCheck = (component) => !props.api.user.isAuth() ?
+		component : <Redirect to="/" />;
+
 	return (
-		<Layout showSidebar={props.isAuth}>
+		<Layout userApi={props.api.user}>
 			<Switch>
 				<Route path="/products/" component={(props) => authCheck(<Products {...props}/>)}/>
 				<Route path="/tables/:id" component={(props) => authCheck(<Table {...props}/>)}/>
 				<Route path="/tables/" component={(props) => authCheck(<Tables {...props}/>)}/>
-				<Route path="/login/" component={Login} isAuth={props.isAuth}/>
+				<Route path="/login/" component={(deps) => needLoginCheck(<Login userApi={props.api.user} {...deps} />)}/>
 				<Route path="/menus/:id" component={(props) => authCheck(<Menu {...props}/>)}/>
 				<Route path="/menus/" component={(props) => authCheck(<Menus {...props}/>)}/>
 				<Route path="/" exact component={(props) => authCheck(<Home {...props}/>)}/>

@@ -9,19 +9,19 @@ class Form extends PureComponent {
 
 		this.props = props;
 		this.state = props.form;
-		this.state.status = Form.Status.INVALID;
+		this.state.status = undefined;
+		this.state.errors = [];
 	}
 
 	render() {
-		console.log(this.state);
 		return (
 			<form className="form form_clearfix" onSubmit={this._onSubmit.bind(this)}>
 				<div className="form__error">
 					{
-						this.state.inputs.map(
-							(input, i) => (
-								input.message.length ?
-									<p key={i} className="form__error-message">{input.message}</p> :
+						this.state.errors.map(
+							(message, i) => (
+								message.length ?
+									<p key={i} className="form__error-message">{message}</p> :
 									null
 							)
 						)
@@ -88,7 +88,6 @@ class Form extends PureComponent {
 
 			if (typeof equals === 'number') {
 				const targetInput = this.state.inputs[equals];
-				console.log(targetInput.value, input.value, targetInput.value === input.value);
 				input.valid = targetInput.value === input.value;
 				input.message = input.valid ? '' : input.error;
 			}
@@ -100,10 +99,12 @@ class Form extends PureComponent {
 	}
 
 	_updateFormStatus() {
-		this.state.status = undefined;
 		const { INVALID, VALID } = Form.Status;
-		let valid = this.state.inputs.reduce((prev, curr) => prev && curr.valid, true);
-		this.setState({ status: valid ? VALID : INVALID });
+		const valid = this.state.inputs.reduce((prev, curr) => prev && curr.valid, true);
+		const errors = this.state.inputs
+			.map((input) => input.message)
+			.filter((message) => message.length);
+		this.setState({ status: valid ? VALID : INVALID, errors });
 	}
 }
 

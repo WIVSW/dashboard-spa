@@ -17,7 +17,6 @@ export default class extends PureComponent {
 	}
 
 	render() {
-		console.log(this.props);
 		return (
 			<div className="auth">
 				<Tabs className='auth__tabs' selectedTabClassName='auth__tab_selected' selectedTabPanelClassName='auth__tab-panel_selected'>
@@ -37,12 +36,20 @@ export default class extends PureComponent {
 	}
 
 	_onLogin(data) {
-		console.log('LOGIN', data);
-		return this._userApi.login(data);
+		return this._userApi
+			.login(data)
+			.then((data) => {
+				this.props.onAuth();
+				return data;
+			});
 	}
 
 	_onSignUp(data) {
-		console.log('SIGN UP', data);
-		return this._userApi.signup(data);
+		return this._userApi
+			.signup(data)
+			.then((data) => {
+				this.props.onAuth();
+				return data;
+			});
 	}
 };

@@ -14,7 +14,8 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'src/public'),
-		filename: "js/[name].[hash].js"
+		filename: "js/[name].[hash].js",
+		publicPath: '/',
 	},
 	optimization: {
 		minimize: false,
@@ -55,29 +56,27 @@ module.exports = {
 						{ loader: 'sass-loader' }
 					]
 				})
-			}
+			},
+			{ test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: "url-loader" },
+			{ test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: "url-loader" }
 		]
 	},
 	devServer: {
-		historyApiFallback: true,
-		hot: true,
-		inline: true,
-
 		host: '192.168.0.103', // Defaults to `localhost`
 		port: 9000, // Defaults to 8080
+		historyApiFallback: true,
 		proxy: {
-			'/**': {
+			'/api': {
 				target: 'http://localhost:3000/',
 				secure: false
 			}
 		}
 	},
 	plugins: [
-		new ExtractTextPlugin("css/index.[hash].css"),
+		new ExtractTextPlugin("css/[name].[hash].css"),
 		new HtmlWebpackPlugin({
 			template: 'src/ui/index.html'
 		}),
-		new CleanWebpackPlugin('src/public/*.*'),
 		new webpack.HotModuleReplacementPlugin()
 	]
 };

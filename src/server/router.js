@@ -1,6 +1,7 @@
+const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 
-const Public = require('./routes/public');
 const User = require('./routes/user');
 const Ingredient = require('./routes/ingredient');
 const IngredientsGroup = require('./routes/ingredients-group');
@@ -27,12 +28,14 @@ class Router {
 	_bindRoutes() {
 		this._app.use(bodyParser.json());
 
-		this._routes.forEach(route => this._app.use(route.PATH, this._router))
+		this._app.use(express.static(path.resolve(__dirname, '../public')));
+		this._app.use(`/api`, this._router);
+		this._routes.forEach(route => this._app.use(`/api${route.PATH}`, this._router));
+		this._app.use((req, res) => res.sendFile(path.resolve(__dirname, '../public/index.html')));
 	}
 
 	_declareRoutes() {
 		[
-			Public,
 			User,
 			Ingredient,
 			IngredientsGroup,

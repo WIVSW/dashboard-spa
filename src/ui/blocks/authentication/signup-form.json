@@ -1,0 +1,54 @@
+{
+	"action": "Sign up",
+	"inputs": [
+		{
+			"name": "email",
+			"export": true,
+			"valid": false,
+			"placeholder": "Type your email here",
+			"type": "email",
+			"value": "",
+			"validation": {
+				"required": true,
+				"pattern": [
+					"[\\w\\d]{3,}@[\\w\\d]{3,}.[\\w]{1,}",
+					"i"
+				]
+			},
+			"message": "",
+			"error": "Incorrect email"
+		},
+		{
+			"name": "password",
+			"export": true,
+			"valid": false,
+			"placeholder": "Type your password here",
+			"type": "password",
+			"value": "",
+			"validation": {
+				"required": true,
+				"pattern": [
+					"[\\S]{3,}",
+					"i"
+				]
+			},
+			"message": "",
+			"error": "Password should have at least three symbols"
+		},
+		{
+			"name": "second password",
+			"export": false,
+			"valid": false,
+			"placeholder": "Repeat your password here",
+			"type": "password",
+			"value": "",
+			"validation": {
+				"required": true,
+				"pattern": [],
+				"equals": 1
+			},
+			"message": "",
+			"error": "Second password should be equal to first one"
+		}
+	]
+}

@@ -9,6 +9,11 @@ export default class extends PureComponent {
 	}
 
 	_onAuth() {
-		this.props.history.goBack();
+		const canGoBack = this.props.history.location.key;
+		if (canGoBack) {
+			this.props.history.goBack();
+		} else {
+			this.props.history.push('/');
+		}
 	}
 };

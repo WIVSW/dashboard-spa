@@ -5,10 +5,12 @@ import Api from './base';
 class User extends Api {
 	constructor(deps) {
 		const path = '/users';
-		 super({
-			 network: deps.network,
-			 path
-		 });
+		super({
+			network: deps.network,
+			path
+		});
+
+		this.EVENT_LOG_OUT = 'log-out';
 	}
 
 	isAuth() {
@@ -25,6 +27,7 @@ class User extends Api {
 	}
 
 	logout() {
+		this.emit(this.EVENT_LOG_OUT);
 		return this._network
 			.request(`${this.PATH}/me/token`, undefined, 'DELETE')
 			.then(() => this._network.removeToken());

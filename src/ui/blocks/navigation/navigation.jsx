@@ -1,4 +1,5 @@
-import React from 'react';
+import React, {PureComponent} from 'react';
+import { BrowserHistory } from 'react-router-dom';
 
 import Link from './__link/navigation__link.jsx';
 
@@ -7,11 +8,25 @@ import './navigation.scss';
 import navigation from './navigation.json';
 
 
-export default (props) => {
-	const links = navigation.map((link, i) => <Link key={i} {...link} />);
-	return (
-		<div className="navigation">
-			{links}
-		</div>
-	)
+
+export default class extends PureComponent {
+	constructor(props) {
+		super(props);
+
+		this._userApi = props.userApi;
+		this._links = navigation.map((link, i) => <Link key={i} {...link} />);
+	}
+
+	render() {
+		return (
+			<div className="navigation">
+				{this._links}
+				<button className="navigation__btn" onClick={this._onLogOut.bind(this)}>Log Out</button>
+			</div>
+		);
+	}
+
+	_onLogOut(e) {
+		// this._userApi.logout();
+	}
 };

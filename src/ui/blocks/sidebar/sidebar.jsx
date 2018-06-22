@@ -7,7 +7,7 @@ import './sidebar.scss';
 export default (props) => {
 	return (
 		<div className="sidebar layout__column">
-			<Navigation/>
+			<Navigation userApi={props.userApi}/>
 		</div>
 	)
 };

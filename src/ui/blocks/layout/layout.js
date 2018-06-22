@@ -22,6 +22,6 @@ export default class extends PureComponent {
 		if (!this.props.userApi.isAuth())
 			return null;
 
-		return <Sidebar/>;
+		return <Sidebar userApi={this.props.userApi}/>;
 	}
 };

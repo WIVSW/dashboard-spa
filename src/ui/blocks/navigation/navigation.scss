@@ -27,4 +27,21 @@
 			}
 		}
 	}
+
+	&__btn {
+		display: block;
+		border: none;
+		margin: 15px auto 0;
+		background-color: #e2e6ef;
+		color: #8f95a4;
+		height: 35px;
+		padding: 0 15px;
+		border-radius: 30px;
+		cursor: pointer;
+		transition: all 250ms ease-in;
+		&:hover {
+			color: #fff;
+			background-color: #f98700;
+		}
+	}
 }

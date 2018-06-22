@@ -25,7 +25,9 @@ class User extends Api {
 	}
 
 	logout() {
-		return this._network.request(`${this.PATH}/me/token`, undefined, 'DELETE');
+		return this._network
+			.request(`${this.PATH}/me/token`, undefined, 'DELETE')
+			.then(() => this._network.removeToken());
 	}
 
 	signup(data) {

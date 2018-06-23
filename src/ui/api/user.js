@@ -27,10 +27,12 @@ class User extends Api {
 	}
 
 	logout() {
-		this.emit(this.EVENT_LOG_OUT);
 		return this._network
 			.request(`${this.PATH}/me/token`, undefined, 'DELETE')
-			.then(() => this._network.removeToken());
+			.then(() => {
+				this._network.removeToken();
+				this.emit(this.EVENT_LOG_OUT);
+			});
 	}
 
 	signup(data) {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import Layout from './blocks/layout/layout';
+import Auth from './auth';
 
 import Home from './pages/home/home';
 import Products from './pages/products/products';
@@ -15,8 +16,7 @@ import NotFound from './pages/not-found/not-found';
 
 
 export default (props) => {
-	const authCheck = (component) => props.api.user.isAuth() ?
-		component : <Redirect to="/login/" />;
+	const authCheck = (component, deps) => <Auth {...deps} userApi={props.api.user} component={component} />;
 
 	const needLoginCheck = (component) => !props.api.user.isAuth() ?
 		component : <Redirect to="/" />;
@@ -24,14 +24,14 @@ export default (props) => {
 	return (
 		<Layout userApi={props.api.user}>
 			<Switch>
-				<Route path="/products/" component={(props) => authCheck(<Products {...props}/>)}/>
-				<Route path="/tables/:id" component={(props) => authCheck(<Table {...props}/>)}/>
-				<Route path="/tables/" component={(props) => authCheck(<Tables {...props}/>)}/>
+				<Route path="/products/" component={(deps) => authCheck(<Products {...deps}/>, deps)}/>
+				<Route path="/tables/:id" component={(deps) => authCheck(<Table {...deps}/>, deps)}/>
+				<Route path="/tables/" component={(deps) => authCheck(<Tables {...deps}/>, deps)}/>
 				<Route path="/login/" component={(deps) => needLoginCheck(<Login userApi={props.api.user} {...deps} />)}/>
-				<Route path="/menus/:id" component={(props) => authCheck(<Menu {...props}/>)}/>
-				<Route path="/menus/" component={(props) => authCheck(<Menus {...props}/>)}/>
-				<Route path="/" exact component={(props) => authCheck(<Home {...props}/>)}/>
-				<Route component={NotFound}/>
+				<Route path="/menus/:id" component={(deps) => authCheck(<Menu {...deps}/>, deps)}/>
+				<Route path="/menus/" component={(deps) => authCheck(<Menus {...deps}/>, deps)}/>
+				<Route path="/" exact component={(deps) => authCheck(<Home {...deps}/>, deps)} />
+				<Route component={(deps) => authCheck(<NotFound {...deps}/>, deps)}/>
 			</Switch>
 		</Layout>
 	);

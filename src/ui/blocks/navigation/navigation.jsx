@@ -1,5 +1,4 @@
-import React, {PureComponent} from 'react';
-import { BrowserHistory } from 'react-router-dom';
+import React, {Component} from 'react';
 
 import Link from './__link/navigation__link.jsx';
 
@@ -9,7 +8,7 @@ import navigation from './navigation.json';
 
 
 
-export default class extends PureComponent {
+export default class extends Component {
 	constructor(props) {
 		super(props);
 
@@ -27,6 +26,6 @@ export default class extends PureComponent {
 	}
 
 	_onLogOut(e) {
-		// this._userApi.logout();
+		this._userApi.logout();
 	}
 };

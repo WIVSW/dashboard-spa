@@ -26,7 +26,7 @@ export default (props) => {
 			<Switch>
 				<Route path="/products/" component={(deps) => authCheck(<Products {...deps}/>, deps)}/>
 				<Route path="/tables/:id" component={(deps) => authCheck(<Table {...deps}/>, deps)}/>
-				<Route path="/tables/" component={(deps) => authCheck(<Tables {...deps}/>, deps)}/>
+				<Route path="/tables/" component={(deps) => authCheck(<Tables {...deps} ingredientsGroupApi={props.api.ingredientsGroup}/>, deps)}/>
 				<Route path="/login/" component={(deps) => needLoginCheck(<Login userApi={props.api.user} {...deps} />)}/>
 				<Route path="/menus/:id" component={(deps) => authCheck(<Menu {...deps}/>, deps)}/>
 				<Route path="/menus/" component={(deps) => authCheck(<Menus {...deps}/>, deps)}/>

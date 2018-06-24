@@ -5,6 +5,9 @@ import TableFilterable from '../../blocks/table-filterable/table-filterable.jsx'
 
 export default class extends PureComponent {
 	render() {
+		this.props.ingredientsGroupApi
+			.read()
+			.then((data) => console.log(data));
 		const filters = [
 			{
 				id: 123,

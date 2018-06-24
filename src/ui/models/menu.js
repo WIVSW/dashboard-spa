@@ -2,15 +2,16 @@ import Model from './base';
 
 
 
-class User extends Model {
+class Menu extends Model {
 	constructor(data) {
 		super(data);
 	}
 
 	_parse(data) {
 		this._id = data['_id'];
-		this.email = data['email'];
+		this.name = data['name'];
+		this.products = data['products'];
 	}
 }
 
-export default User;
+export default Menu;

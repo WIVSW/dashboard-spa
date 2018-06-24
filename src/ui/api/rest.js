@@ -28,3 +28,5 @@ class Rest extends Api {
 		return this._network.request(`${this.PATH}/${ids.join(',')}`, undefined, 'DELETE');
 	}
 }
+
+export default Rest;

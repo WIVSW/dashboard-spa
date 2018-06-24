@@ -36,7 +36,7 @@ class User extends Api {
 	}
 
 	signup(data) {
-		return this._network.request(this.PATH, data, 'POST', undefined, true);
+		return this._network.request(`${this.PATH}/`, data, 'POST', undefined, true);
 	}
 }
 

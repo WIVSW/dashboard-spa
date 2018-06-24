@@ -1,13 +1,12 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
+import Page from '../base';
 
 
 
-export default class extends PureComponent {
-	render() {
-		return (
-			<div>
-				Home
-			</div>
-		);
+class Home extends Page {
+	getTemplate() {
+		return (<div>Home</div>)
 	}
 }
+
+export default Home;

@@ -1,4 +1,4 @@
-import Rest from './base';
+import Api from './base';
 
 
 

@@ -19,7 +19,8 @@ class Table extends Model {
 	_parseRow(data) {
 		return {
 			id: data['id'],
-			cells: TableCell.fromDataArray(data['cells'])
+			cells: TableCell.fromDataArray(data['cells']),
+			url: data['url']
 		};
 	}
 }

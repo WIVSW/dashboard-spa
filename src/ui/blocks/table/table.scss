@@ -21,4 +21,42 @@
 		padding: 0 15px;
 		color: #000;
 	}
+
+	&__controls {
+		display: block;
+		text-align: center;
+	}
+
+	&__control {
+		display: inline;
+		margin: 0 5px;
+		background: none;
+		outline: none;
+		border: none;
+		text-decoration: none;
+		color: #000000;
+		font-size: 22px;
+		cursor: pointer;
+		transition: all 250ms ease-in;
+		&:hover {
+			color: #f98700;
+		}
+	}
+
+	&__btn {
+		display: block;
+		border: none;
+		margin: 15px 15px 0 auto;
+		background-color: #edeff2;
+		color: #8f95a4;
+		height: 35px;
+		padding: 0 15px;
+		border-radius: 30px;
+		cursor: pointer;
+		transition: all 250ms ease-in;
+		&:hover {
+			color: #fff;
+			background-color: #f98700;
+		}
+	}
 }

@@ -7,6 +7,12 @@ import TableModel from '../../models/table';
 
 
 class Tables extends Page {
+	constructor(props) {
+		super(props);
+
+		this.URL = '/tables/';
+	}
+
 	preload() {
 		return Promise
 			.all([
@@ -15,8 +21,7 @@ class Tables extends Page {
 	}
 
 	getTemplate() {
-		console.log(this.state);
-		return <Table table={this.state.table}/>
+		return <Table table={this.state.table} onRowDelete={(id) => this._deleteIngredientGroup(id)}/>
 	}
 
 	_saveState(data) {
@@ -26,17 +31,13 @@ class Tables extends Page {
 	}
 
 	_parseTable(data) {
-		const table = { head: ['Name', 'View', 'Delete'], body: []};
+		const table = { head: ['Name'], body: []};
 		data.forEach((group) => {
-			const row = { id: group._id, cells: [] };
+			const row = { id: group._id, cells: [], url: `${this.URL}${group._id}` };
 
 			const name = (data) => <span contentEditable={true} suppressContentEditableWarning>{data.children}</span>;
-			const link = (data) => <Link style={{color: 'blue'}} to={`/tables/${group._id}`}>{data.children}</Link>;
-			const deleteBtn = (data) => <span style={{color: 'blue', cursor: 'pointer'}} onClick={() => this._deleteIngredientGroup(group._id)}>{data.children}</span>;
 
 			row.cells.push({ 'key': 'Name', 'value': group.name, 'component': name });
-			row.cells.push({ 'key': 'View', 'value': 'View', 'component': link });
-			row.cells.push({ 'key': 'Delete', 'value': 'Delete', 'component': deleteBtn });
 
 			table.body.push(row);
 		});
@@ -44,16 +45,7 @@ class Tables extends Page {
 	}
 
 	_deleteIngredientGroup(groupId) {
-		console.log(groupId);
-		this.props.ingredientsGroupApi
-			.delete([groupId])
-			.then(() => {
-				const { table } = this.state;
-
-				table.body = table.body.filter((row) => row.id !== groupId);
-				this.setState({ table });
-				console.log(this.state)
-			});
+		return this.props.ingredientsGroupApi.delete([groupId]);
 	}
 }
 

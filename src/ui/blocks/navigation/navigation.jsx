@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 
 import Link from './__link/navigation__link.jsx';
+import Button from '../button/button.jsx';
 
 import './navigation.scss';
 
@@ -20,7 +21,13 @@ export default class extends Component {
 		return (
 			<div className="navigation">
 				{this._links}
-				<button className="navigation__btn" onClick={this._onLogOut.bind(this)}>Log Out</button>
+				<Button
+					status={Button.Status.ACTIVE}
+					className="navigation__btn"
+					onClick={this._onLogOut.bind(this)}
+				>
+					Log Out
+				</Button>
 			</div>
 		);
 	}

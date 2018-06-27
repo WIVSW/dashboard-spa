@@ -16,27 +16,25 @@
 	}
 
 	&__btn {
-		display: block;
-		float: right;
-		background-color: #f98700;
-		color: #fff;
 		font-family: inherit;
-		padding: 15px 20px;
 		font-size: 16px;
-		border: none;
-		cursor: pointer;
-		border-radius: 30px;
-		position: relative;
-		overflow: hidden;
 
-		&_disabled {
+		&.btn_active {
+			color: #fff;
+			background-color: #f98700;
+		}
+
+		&.btn_disabled {
 			background-color: #e2e6ef;
 			color: #828999;
 		}
 
-		&_loading {
-			background-color: #fff;
-			cursor: default;
+		&.btn_disabled {
+			background-color: #e2e6ef;
+			color: #828999;
+		}
+
+		&.btn_loading {
 			&:before {
 				color: #828999;
 				position: absolute;

@@ -1,5 +1,7 @@
 import React, { PureComponent } from 'react';
 
+import Button from '../button/button.jsx';
+
 import './form.scss';
 
 
@@ -41,12 +43,13 @@ class Form extends PureComponent {
 						/>
 					)
 				}
-				<button
+				<Button
 					type='submit'
-					className={`form__btn ${Form.BtnClasses[this.state.status]}`}
+					className={`form__btn`}
+					status={this.state.status}
 				>
-					{this.state.action}
-				</button>
+					{ this.state.action }
+				</Button>
 			</form>
 		);
 	}

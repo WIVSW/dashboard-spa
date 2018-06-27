@@ -1,6 +1,7 @@
 import React, {PureComponent} from 'react';
 import { Link } from 'react-router-dom';
 import TableCell from '../../models/table-cell';
+import Button from '../button/button.jsx';
 
 import './table.scss';
 
@@ -13,7 +14,6 @@ class Table extends PureComponent {
 		const table = this._parseTable(props.table);
 		this.state = table;
 		this.state.getCellByKey = table.getCellByKey;
-		this.state.btnState = Table.State.DEFAULT;
 	}
 
 	render() {
@@ -48,17 +48,13 @@ class Table extends PureComponent {
 					})}
 					</tbody>
 				</table>
-				<button
-					className={`table__btn table__btn_full-width ${Table.State.LOADING === this.state.btnState ? 'icon-spin' : ''}`}
-				>
-					Add new
-				</button>
-				<button
-					className={`table__btn ${Table.State.LOADING === this.state.btnState ? 'icon-spin' : ''}`}
+				<Button
+					className={`table__btn btn_full-width`}
+				>Add new</Button>
+				<Button
+					className={`table__btn`}
 					onClick={() => this._onSave()}
-				>
-					Save Changes
-				</button>
+				>Save Changes</Button>
 			</div>
 		)
 	}
@@ -102,7 +98,6 @@ class Table extends PureComponent {
 	}
 
 	_onSave() {
-		this.setState({ btnState: Table.State.LOADING });
 		const changed = {};
 
 		this.state.body
@@ -121,21 +116,11 @@ class Table extends PureComponent {
 			});
 
 		if (Object.keys(changed).length) {
-			this.props
-				.onSave(changed)
-				.then(() => this.setState({ btnState: Table.State.DEFAULT }));
+			return this.props.onSave(changed);
+		} else {
+			return Promise.reject();
 		}
 	}
-};
-
-Table.State = {
-	DEFAULT: 0,
-	LOADING: 1
-};
-
-Table.BtnClass = {
-	'0': '',
-	'1': 'icon-spin'
 };
 
 export default Table;

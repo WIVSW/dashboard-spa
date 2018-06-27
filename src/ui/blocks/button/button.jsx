@@ -8,8 +8,7 @@ class Button extends PureComponent {
 		super(props);
 
 		this.state = {};
-		this.state.status = typeof props.status === 'number' ? props.status : Button.Status.VALID;
-		console.log(this.state.status);
+		this.state.status = typeof props.status === 'number' ? props.status : Button.Status.ACTIVE;
 	}
 
 	componentWillReceiveProps(props) {
@@ -17,7 +16,6 @@ class Button extends PureComponent {
 	}
 
 	render() {
-		console.log('RENDER');
 		return (
 			<button
 				type={this.props.type || 'button'}

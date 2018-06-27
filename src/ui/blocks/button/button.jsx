@@ -41,9 +41,7 @@ class Button extends PureComponent {
 
 		this.props
 			.onClick()
-			.then(() => this.setState({ status: ACTIVE }))
-			.catch(() => this.setState({ status: ACTIVE }));
-
+			.finally(() => this.setState({ status: ACTIVE }));
 	}
 }
 

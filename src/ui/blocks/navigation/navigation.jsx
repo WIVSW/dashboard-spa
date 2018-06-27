@@ -34,5 +34,7 @@ export default class extends Component {
 
 	_onLogOut(e) {
 		this._userApi.logout();
+
+		return Promise.resolve();
 	}
 };

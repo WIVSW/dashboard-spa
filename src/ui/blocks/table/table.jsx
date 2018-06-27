@@ -13,6 +13,7 @@ class Table extends PureComponent {
 		const table = this._parseTable(props.table);
 		this.state = table;
 		this.state.getCellByKey = table.getCellByKey;
+		this.state.btnState = Table.State.DEFAULT;
 	}
 
 	render() {
@@ -35,7 +36,7 @@ class Table extends PureComponent {
 										<td key={j} className="table__cell">
 											{
 												cell.component ?
-													<Wrap>{cell.value}</Wrap> :
+													<Wrap contentEditable={!!cell.editable} onInput={(e) => this._onInput(e, cell)}>{cell.value}</Wrap> :
 													cell.value
 											}
 										</td>
@@ -47,7 +48,17 @@ class Table extends PureComponent {
 					})}
 					</tbody>
 				</table>
-				<button className="table__btn" onClick={() => this._onSave()}>Save Changes</button>
+				<button
+					className={`table__btn table__btn_full-width ${Table.State.LOADING === this.state.btnState ? 'icon-spin' : ''}`}
+				>
+					Add new
+				</button>
+				<button
+					className={`table__btn ${Table.State.LOADING === this.state.btnState ? 'icon-spin' : ''}`}
+					onClick={() => this._onSave()}
+				>
+					Save Changes
+				</button>
 			</div>
 		)
 	}
@@ -85,7 +96,46 @@ class Table extends PureComponent {
 			})
 	}
 
-	_onSave() {}
+	_onInput(e, cell) {
+		cell.value = e.target.textContent;
+		cell.changed = cell.value !== cell.initValue;
+	}
+
+	_onSave() {
+		this.setState({ btnState: Table.State.LOADING });
+		const changed = {};
+
+		this.state.body
+			.forEach((row) => {
+				const changedCells = {};
+
+				row.cells.forEach((cell) => {
+					if (cell.changed) {
+						changedCells[cell.name] = cell.value;
+					}
+				});
+
+				if (Object.keys(changedCells).length) {
+					changed[row.id] = changedCells;
+				}
+			});
+
+		if (Object.keys(changed).length) {
+			this.props
+				.onSave(changed)
+				.then(() => this.setState({ btnState: Table.State.DEFAULT }));
+		}
+	}
+};
+
+Table.State = {
+	DEFAULT: 0,
+	LOADING: 1
+};
+
+Table.BtnClass = {
+	'0': '',
+	'1': 'icon-spin'
 };
 
 export default Table;

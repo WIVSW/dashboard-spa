@@ -21,7 +21,11 @@ class Tables extends Page {
 	}
 
 	getTemplate() {
-		return <Table table={this.state.table} onRowDelete={(id) => this._deleteIngredientGroup(id)}/>
+		return <Table
+			table={this.state.table}
+			onRowDelete={(id) => this._deleteIngredientGroup(id)}
+			onSave={(changes) => this._onSave(changes)}
+		/>
 	}
 
 	_saveState(data) {
@@ -35,9 +39,25 @@ class Tables extends Page {
 		data.forEach((group) => {
 			const row = { id: group._id, cells: [], url: `${this.URL}${group._id}` };
 
-			const name = (data) => <span contentEditable={true} suppressContentEditableWarning>{data.children}</span>;
+			const name = (data) =>
+				<span
+					contentEditable={data.contentEditable}
+					onInput={(e) => data.onInput(e)}
+					suppressContentEditableWarning
+				>
+					{data.children}
+				</span>;
 
-			row.cells.push({ 'key': 'Name', 'value': group.name, 'component': name });
+			row.cells.push({
+				'id': group._id,
+				'key': 'Name',
+				'name': 'name',
+				'value': group.name,
+				'component': name,
+				'initValue': group.name,
+				'editable': true,
+				'changed': false
+			});
 
 			table.body.push(row);
 		});
@@ -46,6 +66,10 @@ class Tables extends Page {
 
 	_deleteIngredientGroup(groupId) {
 		return this.props.ingredientsGroupApi.delete([groupId]);
+	}
+
+	_onSave(changes) {
+		return this.props.ingredientsGroupApi.update(changes);
 	}
 }
 

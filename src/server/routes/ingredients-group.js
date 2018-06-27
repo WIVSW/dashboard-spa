@@ -31,10 +31,7 @@ class IngredientsGroupRoute extends BaseRoute {
 	}
 
 	_setupRoute() {
-		this._router.post(this.PATH, authenticate, addCreator, this._onCreate.bind(this));
-		this._router.get(this.PATH, authenticate, addCreator, this._onRead.bind(this));
-		this._router.get(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onGetByIds.bind(this));
-		this._router.delete(`${this.PATH}/:id`, authenticate, addCreator, idParser, this._onDelete.bind(this));
+		super._setupRoute();
 	}
 }
 

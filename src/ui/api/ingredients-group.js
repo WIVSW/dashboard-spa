@@ -10,10 +10,6 @@ class IngredientsGroup extends Rest {
 			model: IngredientGroupModel
 		})
 	}
-
-	update(data) {
-		throw new Error('Can\'t update ingredients group');
-	}
 }
 
 export default IngredientsGroup;

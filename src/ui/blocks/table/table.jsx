@@ -1,7 +1,9 @@
 import React, {PureComponent} from 'react';
+
 import { Link } from 'react-router-dom';
 import TableCell from '../../models/table-cell';
 import Button from '../button/button.jsx';
+import Popup from '../popup/popup.jsx';
 
 import './table.scss';
 
@@ -14,6 +16,7 @@ class Table extends PureComponent {
 		const table = this._parseTable(props.table);
 		this.state = table;
 		this.state.getCellByKey = table.getCellByKey;
+		this.state.popupVisible = false;
 	}
 
 	render() {
@@ -50,11 +53,13 @@ class Table extends PureComponent {
 				</table>
 				<Button
 					className={`table__btn btn_full-width`}
+					onClick={() => this._onAddNew()}
 				>Add new</Button>
 				<Button
 					className={`table__btn`}
 					onClick={() => this._onSave()}
 				>Save Changes</Button>
+				<Popup isVisible={this.state.popupVisible} />
 			</div>
 		)
 	}
@@ -95,6 +100,12 @@ class Table extends PureComponent {
 	_onInput(e, cell) {
 		cell.value = e.target.textContent;
 		cell.changed = cell.value !== cell.initValue;
+	}
+
+	_onAddNew() {
+		this.setState({ popupVisible: true });
+
+		return Promise.resolve();
 	}
 
 	_onSave() {

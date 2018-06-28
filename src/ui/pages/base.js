@@ -34,7 +34,7 @@ class Page extends PureComponent {
 	}
 
 	_saveState(data) {
-		this.setState({ data });
+		this.setState(data);
 	}
 }
 

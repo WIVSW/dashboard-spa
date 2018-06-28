@@ -20,7 +20,8 @@ class Table extends Model {
 		return {
 			id: data['id'],
 			cells: TableCell.fromDataArray(data['cells']),
-			url: data['url']
+			url: data['url'],
+			supplier: data['supplier']
 		};
 	}
 }

@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import Page from '../base';
 import Table from '../../blocks/table/table.jsx';
 import TableModel from '../../models/table';

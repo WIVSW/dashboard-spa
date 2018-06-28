@@ -12,7 +12,8 @@ class Button extends PureComponent {
 	}
 
 	componentWillReceiveProps(props) {
-		this.setState({ status: props.status })
+		if (typeof props.status === 'number')
+			this.setState({ status: props.status })
 	}
 
 	render() {

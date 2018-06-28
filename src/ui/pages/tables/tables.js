@@ -25,6 +25,7 @@ class Tables extends Page {
 			table={this.state.table}
 			onRowDelete={(id) => this._deleteIngredientGroup(id)}
 			onSave={(changes) => this._onSave(changes)}
+			onAdd={this._onAdd.bind(this)}
 		/>
 	}
 
@@ -35,37 +36,46 @@ class Tables extends Page {
 	}
 
 	_parseTable(data) {
-		const table = { head: ['Name'], body: []};
-		data.forEach((group) => {
-			const row = { id: group._id, cells: [], url: `${this.URL}${group._id}` };
+		return {
+			head: ['Name'],
+			body: data.map(this._parseRow.bind(this))
+		};
+	}
 
-			const name = (data) =>
-				<span
-					contentEditable={data.contentEditable}
-					onInput={(e) => data.onInput(e)}
-					suppressContentEditableWarning
-				>
+	_parseRow(group) {
+		const row = { id: group._id, cells: [], url: `${this.URL}${group._id}` };
+
+		const name = (data) =>
+			<span
+				contentEditable={data.contentEditable}
+				onInput={(e) => data.onInput(e)}
+				suppressContentEditableWarning
+			>
 					{data.children}
 				</span>;
 
-			row.cells.push({
-				'id': group._id,
-				'key': 'Name',
-				'name': 'name',
-				'value': group.name,
-				'component': name,
-				'initValue': group.name,
-				'editable': true,
-				'changed': false
-			});
-
-			table.body.push(row);
+		row.cells.push({
+			'id': group._id,
+			'key': 'Name',
+			'name': 'name',
+			'value': group.name,
+			'component': name,
+			'initValue': group.name,
+			'editable': true,
+			'changed': false
 		});
-		return table;
+
+		return row;
 	}
 
 	_deleteIngredientGroup(groupId) {
 		return this.props.ingredientsGroupApi.delete([groupId]);
+	}
+
+	_onAdd(data) {
+		return this.props.ingredientsGroupApi
+			.create([ data ])
+			.then((groups) => groups.map(this._parseRow.bind(this)));
 	}
 
 	_onSave(changes) {

@@ -59,9 +59,29 @@ class Table extends PureComponent {
 					className={`table__btn`}
 					onClick={() => this._onSave()}
 				>Save Changes</Button>
-				<Popup isVisible={this.state.popupVisible} />
+				<Popup
+					title="Add new Table"
+					isVisible={this.state.popupVisible}
+					onSend={this._onSend.bind(this)}
+					onClose={() => this._onPopupClose()}
+					getKeys={() => this._getKeysWithoutControls()}
+				/>
 			</div>
 		)
+	}
+
+	_getKeysWithoutControls() {
+		const row = this.state.body[0];
+		if (!row) return [];
+		const { cells } = row;
+
+
+		return this.state.head
+			.filter((key) => key !== this.KEY_CONTROLS)
+			.map((key) => {
+				const item = cells.find((item) => item.key === key);
+				return item.name;
+			});
 	}
 
 	_parseTable(table) {
@@ -97,6 +117,10 @@ class Table extends PureComponent {
 			})
 	}
 
+	_onPopupClose() {
+		this.setState({ popupVisible: false })
+	}
+
 	_onInput(e, cell) {
 		cell.value = e.target.textContent;
 		cell.changed = cell.value !== cell.initValue;
@@ -106,6 +130,20 @@ class Table extends PureComponent {
 		this.setState({ popupVisible: true });
 
 		return Promise.resolve();
+	}
+
+	_onSend(data) {
+		return this.props
+			.onAdd(data)
+			.then((response) => {
+				const { body } = this.state;
+
+				response.forEach((row) => body.push(row));
+
+				this.setState({ body, popupVisible: false });
+
+				return Promise.resolve();
+			})
 	}
 
 	_onSave() {

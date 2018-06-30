@@ -9,13 +9,20 @@ export default class extends PureComponent {
 		super(props);
 
 		this.state = this._getInitialState();
+		console.log(this.props);
 	}
 
 	render() {
 		return (
 			<div>
 				<Filters filters={this.state.filters} onFilterSelected={this._onFilterSelected.bind(this)}/>
-				<Table table={this.state.table}/>
+				<Table
+					table={this.state.table}
+
+					onRowDelete={(id) => this.props.onRowDelete(id)}
+					onSave={(changes) => this.props.onSave(changes)}
+					onAdd={(data) => this.props.onAdd(data)}
+				/>
 			</div>
 		);
 	}

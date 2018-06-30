@@ -69,11 +69,12 @@ class Table extends PureComponent {
 					onClick={() => this._onSave()}
 				>Save Changes</Button>
 				<Popup
-					title="Add new Table"
+					title="Add new item"
 					isVisible={this.state.popupVisible}
 					onSend={this._onSend.bind(this)}
 					onClose={() => this._onPopupClose()}
 					getKeys={() => this._getKeysWithoutControls()}
+					getCustomKeyProp={this._getCustomKeyProp.bind(this)}
 				/>
 			</div>
 		)
@@ -165,7 +166,19 @@ class Table extends PureComponent {
 
 				row.cells.forEach((cell) => {
 					if (cell.changed) {
-						changedCells[cell.name] = cell.value;
+						if (cell.name.includes('.')) {
+							const key = this._getCustomKeyProp(cell.name).key;
+							changedCells[key] = {};
+
+							row.cells.forEach((cell) => {
+								if (cell.name && cell.name.includes(`${key}.`)) {
+									const customKey = this._getCustomKeyProp(cell.name).prop;
+									changedCells[key][customKey] = cell.value;
+								}
+							})
+						} else {
+							changedCells[cell.name] = cell.value;
+						}
 					}
 				});
 
@@ -179,6 +192,14 @@ class Table extends PureComponent {
 		} else {
 			return Promise.reject();
 		}
+	}
+
+	_getCustomKeyProp(string) {
+		const arrKeyProp = string.split('.');
+		const key = arrKeyProp[0];
+		const prop = arrKeyProp[1];
+
+		return { key, prop };
 	}
 };
 

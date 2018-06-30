@@ -19,15 +19,15 @@ class Table extends Page {
 			.getByIds([ id ])
 			.then((group) => {
 				if (group && group.length) {
-					data.title = group[0].name;
+					data.group = group[0];
 					return this.props.ingredientApi
 						.getByIds(group[0].ingredients)
 						.then((ingredients) => {
 							const tableFiltered = this._parseTable(ingredients);
-							const table = new TableModel(tableFiltered.table);
-							const { filters } = tableFiltered;
+							data.table = new TableModel(tableFiltered.table);
+							data.filters = tableFiltered.filters;
 
-							return { table, filters };
+							return data;
 						})
 				} else {
 					return Promise.resolve({});
@@ -36,10 +36,17 @@ class Table extends Page {
 	}
 
 	getTemplate() {
-		return <TableFilterable
-			table={this.state.table}
-			filters={this.state.filters}
-		/>
+		return <div>
+			<h1 style={{padding: '15px 30px'}}>{this.state.group.name}</h1>
+			<TableFilterable
+				table={this.state.table}
+				filters={this.state.filters}
+
+				onRowDelete={(id) => this._deleteIngredientGroup(id)}
+				onSave={(changes) => this._onSave(changes)}
+				onAdd={this._onAdd.bind(this)}
+			/>
+		</div>
 	}
 
 	_parseTable(data) {
@@ -104,7 +111,7 @@ class Table extends Page {
 			row.cells.push({
 				'id': ingredient._id,
 				'key': key,
-				'name': `parameter.${key}`,
+				'name': `parameters.${key}`,
 				'value': item,
 				'component': defaultComponent,
 				'initValue': item,
@@ -127,6 +134,25 @@ class Table extends Page {
 		});
 
 		return row;
+	}
+
+	_deleteIngredientGroup(id) {
+		console.log('_deleteIngredientGroup', id)
+		return this.props.ingredientApi.delete([id]);
+	}
+	_onSave(changes) {
+		for(let key in changes)
+			changes[key]['group'] = this.state.group;
+
+		console.log('_onSave', changes);
+		return this.props.ingredientApi.update(changes);
+	}
+	_onAdd(data) {
+		console.log('_onAdd', data)
+		data['group'] = this.state.group;
+		return this.props.ingredientApi
+			.create([ data ])
+			.then((ingredients) => ingredients.map(this._parseRow.bind(this)));
 	}
 }
 

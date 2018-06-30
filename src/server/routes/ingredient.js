@@ -88,8 +88,7 @@ class IngredientRoute extends BaseRoute {
 	_updateOne(_id, body) {
 		return this
 			._hasAccessToGroup(body[_id].group, body._creator)
-			.then(() => super._updateOne(body))
-			.catch(() => null)
+			.then(() => super._updateOne(_id, body))
 	}
 }
 

@@ -26,7 +26,7 @@ class Popup extends PureComponent {
 				<div className="popup__wrap">
 					<div className="popup__content">
 						<h3>{this.state.title}</h3>
-						<Form form={this.state.form} onSubmit={(data) => this.props.onSend(data)}/>
+						<Form form={this.state.form} onSubmit={(data) => this._onSend(data)}/>
 					</div>
 				</div>
 			</div>
@@ -40,25 +40,48 @@ class Popup extends PureComponent {
 	_generateForm(keys) {
 		const form = { action: 'Send', inputs: [] };
 
-		form.inputs = keys.map((key) => ({
-			"name": key,
-			"export": true,
-			"valid": false,
-			"placeholder": `Type ${key} here`,
-			"type": "text",
-			"value": "",
-			"validation": {
-				"required": true,
-				"pattern": [
-					"[\\S]{1,}",
-					"i"
-				]
-			},
-			"message": "",
-			"error": `The ${key} can't be empty`
-		}));
+		form.inputs = keys.map((key) => {
+			const placeholder = key.includes('.') ?
+				this.props.getCustomKeyProp(key).prop : key;
+			return {
+				"name": key,
+				"export": true,
+				"valid": false,
+				"placeholder": `Type the ${placeholder.toLowerCase()} here`,
+				"type": "text",
+				"value": "",
+				"validation": {
+					"required": true,
+					"pattern": [
+						"[\\S]{1,}",
+						"i"
+					]
+				},
+				"message": "",
+				"error": `The ${key} can't be empty`
+			};
+		});
 
 		return form;
+	}
+
+	_onSend(data) {
+		const objToSend = {};
+
+		for(let name in data) {
+			if (name.includes('.')) {
+				const { key, prop } = this.props.getCustomKeyProp(name);
+
+				if (!(key in objToSend))
+					objToSend[key] = {};
+
+				objToSend[key][prop] = data[name];
+			} else {
+				objToSend[name] = data[name];
+			}
+		}
+
+		return this.props.onSend(objToSend);
 	}
 };
 

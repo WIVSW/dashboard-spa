@@ -2,7 +2,7 @@ import React, {PureComponent} from 'react';
 
 import './filter.scss';
 
-export default class extends PureComponent {
+class Filters extends PureComponent {
 	constructor(props) {
 		super(props);
 
@@ -10,6 +10,12 @@ export default class extends PureComponent {
 
 		this.state = this._getInitialState(props.filters);
 		this._onFilterSelected = props.onFilterSelected;
+	}
+
+	componentWillReceiveProps(props) {
+		const filters = this._getDefaultFilters().concat(props.filters);
+
+		this.setState({ filters });
 	}
 
 	render() {
@@ -52,3 +58,5 @@ export default class extends PureComponent {
 	}
 
 };
+
+export default Filters;

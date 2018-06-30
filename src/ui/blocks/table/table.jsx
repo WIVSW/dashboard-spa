@@ -20,13 +20,7 @@ class Table extends PureComponent {
 	}
 
 	componentWillReceiveProps(props) {
-		if (
-			props.table.body.length !==
-			this.state.body.length
-		) {
-			this.setState({ body: props.table.body })
-		}
-
+		this.setState({ body: props.table.body });
 	}
 
 	render() {
@@ -96,7 +90,7 @@ class Table extends PureComponent {
 
 	_parseTable(table) {
 		table.head.push(this.KEY_CONTROLS);
-		table.body.map((row) => row.cells.push(this._getConrols(row)));
+		table.body.map((row) => this._parseRow(row));
 
 		return table;
 	}
@@ -149,7 +143,7 @@ class Table extends PureComponent {
 			.then((response) => {
 				const { body } = this.state;
 
-				response.forEach((row) => body.push(row));
+				response.forEach((row) => body.push(this._parseRow(row)));
 
 				this.setState({ body, popupVisible: false });
 
@@ -192,6 +186,15 @@ class Table extends PureComponent {
 		} else {
 			return Promise.reject();
 		}
+	}
+
+	_parseRow(row) {
+
+		row.cells = TableCell.fromDataArray(row.cells);
+
+		row.cells.push(this._getConrols(row));
+
+		return row;
 	}
 
 	_getCustomKeyProp(string) {

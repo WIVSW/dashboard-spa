@@ -10,6 +10,10 @@ class Rest extends Api {
 	}
 
 	getByIds(ids) {
+		if (!ids.length) {
+			return Promise.resolve([]);
+		}
+
 		return this._network
 			.request(`${this.PATH}/${ids.join(',')}`)
 			.then((data) => data.map((item) => new this.MODEL(item)));

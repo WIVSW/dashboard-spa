@@ -4,12 +4,18 @@ import Filters from '../filters/filters.jsx';
 
 
 
-export default class extends PureComponent {
+class TableFilterable extends PureComponent {
 	constructor(props) {
 		super(props);
 
 		this.state = this._getInitialState();
-		console.log(this.props);
+	}
+
+	componentWillReceiveProps(props) {
+		if (props.table && table.head && table.body) {
+			const { table, filters } = this._getTableWithFilters(props.table);
+			this.setState({ table, filters })
+		}
 	}
 
 	render() {
@@ -45,7 +51,36 @@ export default class extends PureComponent {
 	}
 
 	_getInitialState() {
-		const { filters, table } = this.props;
-		return { filters, table }
+		const { table, filters }  = this._getTableWithFilters(this.props.table);
+		return { table, filters }
+	}
+
+	_getTableWithFilters(table) {
+		let filters = [];
+
+		table.body = table.body.map((row, i) => {
+			const key = row.cells.find((cell) => cell.key === this.props.filterKey).value;
+			const filter = !!filters.length &&
+			filters.find((filter) => filter.name === key);
+
+			if (!filter) {
+				const lastFilter = filters.slice(-1)[0];
+				const id = lastFilter ? lastFilter.id + 1 : 0;
+				const name = key;
+
+				row.filterId = id;
+
+				filters.push({ id, name });
+			} else {
+				row.filterId = filter.id;
+			}
+
+			return row;
+		});
+
+		return { table, filters };
 	}
 }
+
+
+export default TableFilterable;

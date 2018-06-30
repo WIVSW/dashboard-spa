@@ -21,16 +21,16 @@ class Table extends Page {
 				if (group && group.length) {
 					data.group = group[0];
 					return this.props.ingredientApi
-						.getByIds(group[0].ingredients)
+						.getByIds(data.group.ingredients)
 						.then((ingredients) => {
 							const tableFiltered = this._parseTable(ingredients);
 							data.table = new TableModel(tableFiltered.table);
-							data.filters = tableFiltered.filters;
 
 							return data;
 						})
 				} else {
-					return Promise.resolve({});
+					data.table = new TableModel({ head: [], body: [] });
+					return data;
 				}
 			})
 	}
@@ -40,7 +40,7 @@ class Table extends Page {
 			<h1 style={{padding: '15px 30px'}}>{this.state.group.name}</h1>
 			<TableFilterable
 				table={this.state.table}
-				filters={this.state.filters}
+				filterKey={'Supplier'}
 
 				onRowDelete={(id) => this._deleteIngredientGroup(id)}
 				onSave={(changes) => this._onSave(changes)}
@@ -50,38 +50,31 @@ class Table extends Page {
 	}
 
 	_parseTable(data) {
+		if (!data.length) {
+			return {
+				table: {
+					head: ['Name', 'Supplier', 'Prime cost'],
+					body: []
+				}
+			}
+		}
+
 		const table = {
 			head: []
 		};
 
-		const filters = [];
+		table.body = data.map((row) => this._parseRow(row, table.head));
 
-		table.body = data.map((row) => this._parseRow(row, table.head, filters));
-
-		return { table, filters: filters.sort((a, b) => a.id - b.id) };
+		return { table };
 	}
 
-	_parseRow(ingredient, tableHead, filters) {
+	_parseRow(ingredient, tableHead) {
 		const row = { id: ingredient._id, cells: [] };
 
 		const setHead = (head) => {
 			if (!tableHead.includes(head))
 				tableHead.push(head);
 		};
-		const supplier = !!filters.length &&
-			filters.find((filter) => filter.name === ingredient.supplier);
-
-		if (!supplier) {
-			const lastSupplier = filters.slice(-1)[0];
-			const id = lastSupplier ? lastSupplier.id + 1 : 0;
-			const name = ingredient.supplier;
-
-			row.filterId = id;
-
-			filters.push({ id, name });
-		} else {
-			row.filterId = supplier.id;
-		}
 
 		const defaultComponent = (data) =>
 			<span
@@ -101,6 +94,19 @@ class Table extends Page {
 			'value': ingredient.name,
 			'component': defaultComponent,
 			'initValue': ingredient.name,
+			'editable': true,
+			'changed': false
+		});
+
+		setHead('Supplier');
+
+		row.cells.push({
+			'id': ingredient._id,
+			'key': 'Supplier',
+			'name': 'supplier',
+			'value': ingredient.supplier,
+			'component': defaultComponent,
+			'initValue': ingredient.supplier,
 			'editable': true,
 			'changed': false
 		});
@@ -137,22 +143,19 @@ class Table extends Page {
 	}
 
 	_deleteIngredientGroup(id) {
-		console.log('_deleteIngredientGroup', id)
 		return this.props.ingredientApi.delete([id]);
 	}
 	_onSave(changes) {
 		for(let key in changes)
 			changes[key]['group'] = this.state.group;
 
-		console.log('_onSave', changes);
 		return this.props.ingredientApi.update(changes);
 	}
 	_onAdd(data) {
-		console.log('_onAdd', data)
-		data['group'] = this.state.group;
+		data['group'] = this.state.group._id;
 		return this.props.ingredientApi
 			.create([ data ])
-			.then((ingredients) => ingredients.map(this._parseRow.bind(this)));
+			.then((ingredients) => ingredients.map((ingredient) => this._parseRow(ingredient, this.state.table.head)));
 	}
 }
 

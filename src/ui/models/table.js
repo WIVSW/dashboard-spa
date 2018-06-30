@@ -21,7 +21,7 @@ class Table extends Model {
 			id: data['id'],
 			cells: TableCell.fromDataArray(data['cells']),
 			url: data['url'],
-			supplier: data['supplier']
+			filterId: data['filterId']
 		};
 	}
 }

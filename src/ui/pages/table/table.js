@@ -55,7 +55,6 @@ class Table extends Page {
 	}
 
 	_parseRow(ingredient, tableHead, filters) {
-		console.log(ingredient);
 		const row = { id: ingredient._id, cells: [] };
 
 		const setHead = (head) => {
@@ -70,11 +69,11 @@ class Table extends Page {
 			const id = lastSupplier ? lastSupplier.id + 1 : 0;
 			const name = ingredient.supplier;
 
-			row.supplier = id;
+			row.filterId = id;
 
 			filters.push({ id, name });
 		} else {
-			row.supplier = supplier.id;
+			row.filterId = supplier.id;
 		}
 
 		const defaultComponent = (data) =>

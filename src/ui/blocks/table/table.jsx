@@ -19,6 +19,16 @@ class Table extends PureComponent {
 		this.state.popupVisible = false;
 	}
 
+	componentWillReceiveProps(props) {
+		if (
+			props.table.body.length !==
+			this.state.body.length
+		) {
+			this.setState({ body: props.table.body })
+		}
+
+	}
+
 	render() {
 		const table = this.state;
 		return (
@@ -29,7 +39,6 @@ class Table extends PureComponent {
 						{table.head.map((item, i) => <th key={i} className="table__cell table__cell-in-head">{item}</th>)}
 					</tr>
 					{table.body.map((row, i) => {
-						row.cells.push(this._getConrols(row));
 						return (
 							<tr key={row.id} className="table__body-row table__row">
 								{table.head.map((key, j) => {
@@ -86,6 +95,7 @@ class Table extends PureComponent {
 
 	_parseTable(table) {
 		table.head.push(this.KEY_CONTROLS);
+		table.body.map((row) => row.cells.push(this._getConrols(row)));
 
 		return table;
 	}

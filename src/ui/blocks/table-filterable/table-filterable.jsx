@@ -8,7 +8,6 @@ export default class extends PureComponent {
 	constructor(props) {
 		super(props);
 
-		this.props = props;
 		this.state = this._getInitialState();
 	}
 
@@ -22,15 +21,14 @@ export default class extends PureComponent {
 	}
 
 	_filterTable(id) {
-		const { head, body } = this.props.table;
-		const result = { head };
+		const table =  Object.assign({}, this.state.table);
 
-		result.body = body.filter((item) => item.supplier === id);
+		table.body = this.props.table.body.filter((item) => item.filterId === id);
 
-		if (!result.body.length)
-			result.body = this.props.table.body;
+		if (!table.body.length)
+			table.body = this.props.table.body;
 
-		return result;
+		return table;
 	}
 
 	_onFilterSelected(id) {

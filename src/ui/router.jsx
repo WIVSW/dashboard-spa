@@ -43,7 +43,7 @@ export default (props) => {
 				)}/>
 				<Route path="/login/" component={(deps) => needLoginCheck(<Login userApi={props.api.user} {...deps} />)}/>
 				<Route path="/menus/:id" component={(deps) => authCheck(<Menu {...deps}/>, deps)}/>
-				<Route path="/menus/" component={(deps) => authCheck(<Menus {...deps}/>, deps)}/>
+				<Route path="/menus/" component={(deps) => authCheck(<Menus menuApi={props.api.menu} {...deps}/>, deps)}/>
 				<Route path="/" exact component={(deps) => authCheck(<Home {...deps}/>, deps)} />
 				<Route component={(deps) => authCheck(<NotFound {...deps}/>, deps)}/>
 			</Switch>

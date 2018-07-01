@@ -24,7 +24,7 @@ export default (props) => {
 	return (
 		<Layout userApi={props.api.user}>
 			<Switch>
-				<Route path="/products/" component={(deps) => authCheck(<Products {...deps}/>, deps)}/>
+				<Route path="/products/" component={(deps) => authCheck(<Products productApi={props.api.product} {...deps}/>, deps)}/>
 				<Route path="/tables/:id" component={(deps) => authCheck(
 					<Table
 						{...deps}
@@ -42,7 +42,13 @@ export default (props) => {
 					deps
 				)}/>
 				<Route path="/login/" component={(deps) => needLoginCheck(<Login userApi={props.api.user} {...deps} />)}/>
-				<Route path="/menus/:id" component={(deps) => authCheck(<Menu {...deps}/>, deps)}/>
+				<Route path="/menus/:id" component={(deps) => authCheck(
+					<Menu
+						menuApi={props.api.menu}
+						productApi={props.api.product}
+						{...deps}
+					/>, deps
+				)}/>
 				<Route path="/menus/" component={(deps) => authCheck(<Menus menuApi={props.api.menu} {...deps}/>, deps)}/>
 				<Route path="/" exact component={(deps) => authCheck(<Home {...deps}/>, deps)} />
 				<Route component={(deps) => authCheck(<NotFound {...deps}/>, deps)}/>

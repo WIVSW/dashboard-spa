@@ -5,6 +5,8 @@ import TableModel from "../../models/table";
 import ProductModel from "../../models/product";
 import Table from "../../blocks/table/table.jsx";
 
+import Autocomplete from '../../blocks/autocomplete/autocomplete.jsx';
+
 
 
 class Menu extends Page {
@@ -44,10 +46,12 @@ class Menu extends Page {
 	getTemplate() {
 		return <div>
 			<h1 style={{padding: '15px 30px'}}>{this.state.menu.name}</h1>
+			<Autocomplete onAdd={(product) => this._onInputNew(product)} itemName={'product'} source={this._AllProducts}/>
 			<Table
 				table={this.state.table}
+				showAddBtn={false}
 
-				onRowDelete={(id) => this._deleteIngredientGroup(id)}
+				onRowDelete={(id) => this._delete(id)}
 				onSave={(changes) => this._onSave(changes)}
 				onAdd={this._onAdd.bind(this)}
 			/>
@@ -57,10 +61,8 @@ class Menu extends Page {
 	_parseTable(data) {
 		if (!data.length) {
 			return {
-				table: {
-					head: ['Name', 'Price'],
-					body: []
-				}
+				head: ['Name', 'Price'],
+				body: []
 			}
 		}
 
@@ -110,8 +112,33 @@ class Menu extends Page {
 		return row;
 	}
 
-	_deleteIngredientGroup(id) {
-		return this.props.productApi.delete([id]);
+	_onInputNew(product) {
+		const model = new ProductModel(product);
+		const { menu } = this.state;
+		this._products.push(model);
+		menu.products.push(model._id);
+		const parsedTable = this._parseTable(this._products);
+
+		const updateObj = {};
+		updateObj[menu._id] = menu;
+
+		return this.props.menuApi
+			.update(updateObj)
+			.then((data) => {
+				this.setState({ table: {body: parsedTable.body} });
+				return data;
+			});
+	}
+
+	_delete(id) {
+		const { menu } = this.state;
+		const index = menu.products.findIndex((productId) => productId === id);
+		menu.products.splice(index, 1);
+
+		const updateObj = {};
+		updateObj[menu._id] = menu;
+
+		return this.props.menuApi.update(updateObj);
 	}
 	_onSave(changes) {
 		return this.props.productApi.update(changes);
@@ -129,7 +156,7 @@ class Menu extends Page {
 				});
 
 				const updateObj = {};
-				updateObj[this.state.menu._id] = this.state.menu
+				updateObj[this.state.menu._id] = this.state.menu;
 
 				this.props.menuApi.update(updateObj);
 

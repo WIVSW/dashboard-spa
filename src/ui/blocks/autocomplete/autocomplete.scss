@@ -1,0 +1,47 @@
+.autocomplete {
+	padding: 15px 30px;
+	position: relative;
+	.form__input {
+		background-color: #fff;
+		width: 450px;
+		display: inline-block;
+		height: 45px;
+		margin: 0;
+	}
+
+	&__btn {
+		display: inline-block;
+		margin: 0 15px;
+	}
+
+	&__result {
+		display: none;
+		background-color: #fff;
+		position: absolute;
+		top: 60px;
+		left: 30px;
+		width: 450px;
+		border-radius: 0 0 30px 30px;
+		z-index: 0;
+		padding: 15px 0px;
+		overflow: hidden;
+	}
+
+	&__result-item {
+		padding: 5px 15px;
+		&:hover {
+			background-color: #f98700;
+			cursor: pointer;
+		}
+	}
+
+	&_found {
+		.form__input {
+			border-radius: 30px 30px 0 0;
+		}
+
+		.autocomplete__result {
+			display: block;
+		}
+	}
+}

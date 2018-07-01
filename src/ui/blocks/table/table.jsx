@@ -17,10 +17,20 @@ class Table extends PureComponent {
 		this.state = table;
 		this.state.getCellByKey = table.getCellByKey;
 		this.state.popupVisible = false;
+		this.state.showAddBtn = typeof this.props.showAddBtn === 'undefined' ? true : this.props.showAddBtn;
 	}
 
 	componentWillReceiveProps(props) {
-		this.setState({ body: props.table.body });
+		const body = props.table.body.map((row) => {
+			const hasControls = row.cells.find((cell) => cell.key === this.KEY_CONTROLS);
+
+			if (hasControls) {
+				return row;
+			} else {
+				return this._parseRow(row);
+			}
+		});
+		this.setState({ body });
 	}
 
 	render() {
@@ -54,10 +64,12 @@ class Table extends PureComponent {
 					})}
 					</tbody>
 				</table>
-				<Button
-					className={`table__btn btn_full-width`}
-					onClick={() => this._onAddNew()}
-				>Add new</Button>
+				{this.state.showAddBtn ? (
+					<Button
+						className={`table__btn btn_full-width`}
+						onClick={() => this._onAddNew()}
+					>Add new</Button>
+				) : null}
 				<Button
 					className={`table__btn`}
 					onClick={() => this._onSave()}

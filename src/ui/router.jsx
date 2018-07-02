@@ -5,6 +5,7 @@ import Layout from './blocks/layout/layout';
 import Auth from './auth';
 
 import Home from './pages/home/home';
+import Product from './pages/product/product.jsx'
 import Products from './pages/products/products';
 import Table from './pages/table/table';
 import Tables from './pages/tables/tables';
@@ -24,6 +25,16 @@ export default (props) => {
 	return (
 		<Layout userApi={props.api.user}>
 			<Switch>
+				<Route
+					path="/products/:id"
+					component={(deps) => authCheck(
+						<Product
+							productApi={props.api.product}
+							ingredientApi={props.api.ingredient}
+							{...deps}
+						/>, deps)}
+				/>
+
 				<Route path="/products/" component={(deps) => authCheck(<Products productApi={props.api.product} {...deps}/>, deps)}/>
 				<Route path="/tables/:id" component={(deps) => authCheck(
 					<Table

@@ -2,6 +2,8 @@ import React from 'react';
 import Page from '../base';
 import Table from '../../blocks/table/table.jsx';
 import TableModel from '../../models/table';
+import Autocomplete from '../../blocks/autocomplete/autocomplete.jsx';
+import IngredientModel from "../../models/ingredient";
 
 class Product extends Page {
 	constructor(props) {
@@ -21,7 +23,9 @@ class Product extends Page {
 					(data[1].length && data[1][0]) || null;
 
 				this._ingredients = this._product ?
-					this._allIngredients.filter((ingredient) => this._product.ingredients.includes(ingredient._id)) :
+					this._product.ingredients.map(
+						(id) => this._allIngredients.find((ingredient) => ingredient._id === id)
+					) :
 					[];
 
 				const table = new TableModel(this._parseTable(this._ingredients).table);
@@ -34,7 +38,14 @@ class Product extends Page {
 		return (
 			<div>
 				<h1 style={{padding: '15px 30px'}}>{this._product.name}</h1>
-				<Table table={this.state.table} showAddBtn={false}/>
+				<Autocomplete onAdd={(product) => this._onInputNew(product)} source={this._allIngredients}/>
+				<Table
+					table={this.state.table}
+					showAddBtn={false}
+
+					onRowDelete={(id) => this._delete(id)}
+					onSave={(changes) => this._onSave(changes)}
+				/>
 			</div>
 		);
 	}
@@ -130,6 +141,42 @@ class Product extends Page {
 		});
 
 		return row;
+	}
+
+	_onInputNew(ingredient) {
+		const model = new IngredientModel(ingredient);
+		this._ingredients.push(model);
+		this._product.ingredients.push(model._id);
+		const parsedTable = this._parseTable(this._ingredients).table;
+
+		const updateObj = {};
+		updateObj[this._product._id] = this._product;
+
+		return this.props.productApi
+			.update(updateObj)
+			.then((data) => {
+				this.setState({ table: {body: parsedTable.body} });
+				return data;
+			});
+	}
+
+	_delete(id) {
+		const index = this._product.ingredients.findIndex((ingredientId) => ingredientId === id);
+		this._product.ingredients.splice(index, 1);
+
+		const updateObj = {};
+		updateObj[this._product._id] = this._product;
+
+		return this.props.productApi.update(updateObj);
+	}
+
+	_onSave(changes) {
+		for(let key in changes) {
+			const ingredient = this._allIngredients.find((ingredient) => ingredient._id === key);
+			changes[key]['group'] = ingredient.group;
+		}
+
+		return this.props.ingredientApi.update(changes);
 	}
 }
 

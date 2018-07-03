@@ -44,7 +44,7 @@ class Table extends PureComponent {
 					</tr>
 					{table.body.map((row, i) => {
 						return (
-							<tr key={row.id} className="table__body-row table__row">
+							<tr key={i} className="table__body-row table__row">
 								{table.head.map((key, j) => {
 									const cell = table.getCellByKey(key, row.id);
 									let Wrap = cell.component;

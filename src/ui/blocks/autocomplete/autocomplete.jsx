@@ -44,7 +44,15 @@ class Autocomplete extends PureComponent {
 		const { value } = e.target;
 		const found = value.length ?
 			this.props.source
-				.filter((product) => product.name.toLowerCase().includes(value.toLowerCase())) :
+				.filter((item) => {
+					const name = item.name.toLowerCase();
+					const val = value.toLowerCase();
+
+					const inSource = name.includes(val);
+					const inIgnore = this.props.ignore.includes(item._id);
+
+					return inSource && !inIgnore;
+				}) :
 			[];
 
 		this.setState({ found, value, activeItem, btnStatus });

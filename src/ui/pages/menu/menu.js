@@ -46,7 +46,11 @@ class Menu extends Page {
 	getTemplate() {
 		return <div>
 			<h1 style={{padding: '15px 30px'}}>{this.state.menu.name}</h1>
-			<Autocomplete onAdd={(product) => this._onInputNew(product)} itemName={'product'} source={this._AllProducts}/>
+			<Autocomplete
+				onAdd={(product) => this._onInputNew(product)}
+				source={this._AllProducts}
+				ignore={this.state.menu.products}
+			/>
 			<Table
 				table={this.state.table}
 				showAddBtn={false}

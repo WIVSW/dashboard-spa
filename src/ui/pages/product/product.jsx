@@ -38,7 +38,11 @@ class Product extends Page {
 		return (
 			<div>
 				<h1 style={{padding: '15px 30px'}}>{this._product.name}</h1>
-				<Autocomplete onAdd={(product) => this._onInputNew(product)} source={this._allIngredients}/>
+				<Autocomplete
+					onAdd={(product) => this._onInputNew(product)}
+					source={this._allIngredients}
+					ignore={this._product.ingredients}
+				/>
 				<Table
 					table={this.state.table}
 					showAddBtn={false}

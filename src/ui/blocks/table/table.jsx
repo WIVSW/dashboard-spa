@@ -79,8 +79,8 @@ class Table extends PureComponent {
 					isVisible={this.state.popupVisible}
 					onSend={this._onSend.bind(this)}
 					onClose={() => this._onPopupClose()}
-					getKeys={() => this._getKeysWithoutControls()}
 					getCustomKeyProp={this._getCustomKeyProp.bind(this)}
+					form={this.props.customForm || this._generateForm(this._getKeysWithoutControls())}
 				/>
 			</div>
 		)
@@ -98,6 +98,34 @@ class Table extends PureComponent {
 				const item = cells.find((item) => item.key === key);
 				return item.name;
 			});
+	}
+
+	_generateForm(keys) {
+		const form = { action: 'Send', inputs: [] };
+
+		form.inputs = keys.map((key) => {
+			const placeholder = key.includes('.') ?
+				this._getCustomKeyProp(key).prop : key;
+			return {
+				"name": key,
+				"export": true,
+				"valid": false,
+				"placeholder": `Type the ${placeholder.toLowerCase()} here`,
+				"type": "text",
+				"value": "",
+				"validation": {
+					"required": true,
+					"pattern": [
+						"[\\S]{1,}",
+						"i"
+					]
+				},
+				"message": "",
+				"error": `The ${key} can't be empty`
+			};
+		});
+
+		return form;
 	}
 
 	_parseTable(table) {

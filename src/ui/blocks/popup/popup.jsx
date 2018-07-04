@@ -12,7 +12,7 @@ class Popup extends PureComponent {
 		this.state = {};
 		this.state.title = this.props.title;
 		this.state.isVisible = this.props.isVisible;
-		this.state.form = this._generateForm(this.props.getKeys());
+		this.state.form = this.props.form;
 	}
 
 	componentWillReceiveProps(props) {
@@ -35,34 +35,6 @@ class Popup extends PureComponent {
 
 	_close() {
 		this.props.onClose();
-	}
-
-	_generateForm(keys) {
-		const form = { action: 'Send', inputs: [] };
-
-		form.inputs = keys.map((key) => {
-			const placeholder = key.includes('.') ?
-				this.props.getCustomKeyProp(key).prop : key;
-			return {
-				"name": key,
-				"export": true,
-				"valid": false,
-				"placeholder": `Type the ${placeholder.toLowerCase()} here`,
-				"type": "text",
-				"value": "",
-				"validation": {
-					"required": true,
-					"pattern": [
-						"[\\S]{1,}",
-						"i"
-					]
-				},
-				"message": "",
-				"error": `The ${key} can't be empty`
-			};
-		});
-
-		return form;
 	}
 
 	_onSend(data) {

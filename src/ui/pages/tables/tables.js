@@ -3,6 +3,8 @@ import Page from '../base';
 import Table from '../../blocks/table/table.jsx';
 import TableModel from '../../models/table';
 
+import TableForm from './table-form.json';
+
 
 
 class Tables extends Page {
@@ -25,6 +27,7 @@ class Tables extends Page {
 			onRowDelete={(id) => this._deleteIngredientGroup(id)}
 			onSave={(changes) => this._onSave(changes)}
 			onAdd={this._onAdd.bind(this)}
+			customForm={TableForm}
 		/>
 	}
 
@@ -72,6 +75,9 @@ class Tables extends Page {
 	}
 
 	_onAdd(data) {
+		this.props.serviceParser.parse(data['table']);
+		return Promise.reject();
+
 		return this.props.ingredientsGroupApi
 			.create([ data ])
 			.then((groups) => groups.map(this._parseRow.bind(this)));

@@ -84,8 +84,13 @@ class Form extends PureComponent {
 		const data = {};
 
 		this.state.inputs.forEach((input) => {
-			if (input.export)
-				data[input.name] = input.value
+			if (input.export) {
+				if (input.type === 'file') {
+					data[input.name] = input.files[0];
+				} else {
+					data[input.name] = input.value;
+				}
+			}
 		});
 
 		return data;
@@ -96,10 +101,11 @@ class Form extends PureComponent {
 	}
 
 	_onInputChange(e, i) {
-		const { value } = e.target;
+		const { value, files } = e.target;
 		const elem = this.state.inputs[i];
 
 		elem.value = value;
+		elem.files = files;
 		this._validateInput(elem);
 		this._updateFormStatus();
 	}

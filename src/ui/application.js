@@ -1,4 +1,5 @@
 import Network from './network';
+import Parser from './parser';
 
 import Ingredient from './api/ingredient';
 import IngredientsGroup from './api/ingredients-group';
@@ -13,8 +14,10 @@ class Application {
 		this._network = new Network();
 
 		this.api = {};
+		this.services = {};
 
 		this._bindApis();
+		this._bindServices();
 	}
 
 	_bindApis() {
@@ -32,6 +35,12 @@ class Application {
 		api.product = new Product(apiDeps);
 
 		api.user = new User(apiDeps);
+	}
+
+	_bindServices() {
+		const { services } = this;
+
+		services.parser = new Parser();
 	}
 
 }

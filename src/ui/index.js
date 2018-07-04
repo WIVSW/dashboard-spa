@@ -21,4 +21,4 @@ const App = (props) => (
 );
 
 
-ReactDOM.render(<App api={app.api}/>, document.getElementById('root'));
+ReactDOM.render(<App api={app.api} services={app.services}/>, document.getElementById('root'));

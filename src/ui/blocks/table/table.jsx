@@ -87,17 +87,9 @@ class Table extends PureComponent {
 	}
 
 	_getKeysWithoutControls() {
-		const row = this.state.body[0];
-		if (!row) return [];
-		const { cells } = row;
-
-
 		return this.state.head
 			.filter((key) => key !== this.KEY_CONTROLS)
-			.map((key) => {
-				const item = cells.find((item) => item.key === key);
-				return item.name;
-			});
+			.map((key) => key.toLowerCase());
 	}
 
 	_generateForm(keys) {

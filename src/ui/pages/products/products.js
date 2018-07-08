@@ -35,16 +35,14 @@ class Products extends Page {
 				onRowDelete={(id) => this._deleteIngredientGroup(id)}
 				onSave={(changes) => this._onSave(changes)}
 				onAdd={this._onAdd.bind(this)}
-			/>
+			/>;
 	}
 
 	_parseTable(data) {
 		if (!data.length) {
 			return {
-				table: {
-					head: ['Name', 'Price'],
-					body: []
-				}
+				head: ['Name', 'Price'],
+				body: []
 			}
 		}
 

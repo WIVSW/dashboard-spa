@@ -17,14 +17,7 @@ class Menus extends Page {
 		return this.props.menuApi
 			.read()
 			.then((menus) => {
-				let data;
-				if (menus && menus.length) {
-					const parsed = this._parseTable(menus);
-					data = new TableModel(parsed);
-				} else {
-					data = new TableModel({ head: [], body: [] });
-				}
-				return { table: data };
+				return { table: new TableModel(this._parseTable(menus)) };
 			});
 	}
 

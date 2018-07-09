@@ -13,8 +13,23 @@ const ProductSchema = new Schema({
 		type: Array,
 		default: [],
 		value: {
-			type: Schema.Types.ObjectId,
-			ref: 'Ingredient'
+			type: Object,
+			value: {
+				id: {
+					type: Schema.Types.ObjectId,
+					ref: 'Ingredient'
+				},
+				count: {
+					type: Number,
+					default: 1,
+					validate: {
+						validator: (number) => {
+							return number > 0 && number % 1 === 0;
+						},
+						message: '{VALUE} should be more then 0 and integer!'
+					}
+				}
+			}
 		}
 	},
 	price: {

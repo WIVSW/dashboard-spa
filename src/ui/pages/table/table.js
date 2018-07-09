@@ -23,7 +23,8 @@ class Table extends Page {
 					data.table = new TableModel(tableFiltered.table);
 					
 					return data;
-				}
+				};
+
 				if (group && group.length) {
 					data.group = group[0];
 					return this.props.ingredientApi

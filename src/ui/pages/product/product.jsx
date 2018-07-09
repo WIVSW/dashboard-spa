@@ -24,7 +24,11 @@ class Product extends Page {
 
 				this._ingredients = this._product ?
 					this._product.ingredients.map(
-						(id) => this._allIngredients.find((ingredient) => ingredient._id === id)
+						(item) => {
+							const found = this._allIngredients.find((ingredient) => ingredient._id === item.id);
+							found.count = item.count;
+							return found;
+						}
 					) :
 					[];
 
@@ -41,7 +45,7 @@ class Product extends Page {
 				<Autocomplete
 					onAdd={(product) => this._onInputNew(product)}
 					source={this._allIngredients}
-					ignore={this._product.ingredients}
+					ignore={this._product.ingredients.map((ingredient) => ingredient.id)}
 				/>
 				<Table
 					table={this.state.table}
@@ -58,7 +62,7 @@ class Product extends Page {
 		if (!data.length) {
 			return {
 				table: {
-					head: ['Name', 'Supplier', 'Prime cost'],
+					head: ['Name', 'Supplier', 'Count', 'Prime cost'],
 					body: []
 				}
 			}
@@ -115,6 +119,19 @@ class Product extends Page {
 			'editable': true,
 			'changed': false
 		});
+		
+		setHead('Count');
+		
+		row.cells.push({
+			'id': ingredient._id,
+			'key': 'Count',
+			'name': 'count',
+			'value': ingredient.count,
+			'component': defaultComponent,
+			'initValue': ingredient.count,
+			'editable': true,
+			'changed': false
+		});
 
 		for(let key in ingredient.parameters) {
 			const item = ingredient.parameters[key];
@@ -149,8 +166,9 @@ class Product extends Page {
 
 	_onInputNew(ingredient) {
 		const model = new IngredientModel(ingredient);
+		model.count = 1;
 		this._ingredients.push(model);
-		this._product.ingredients.push(model._id);
+		this._product.ingredients.push({ id: model._id, count: 1});
 		const parsedTable = this._parseTable(this._ingredients).table;
 
 		const updateObj = {};
@@ -165,7 +183,7 @@ class Product extends Page {
 	}
 
 	_delete(id) {
-		const index = this._product.ingredients.findIndex((ingredientId) => ingredientId === id);
+		const index = this._product.ingredients.findIndex((ingredient) => ingredient.id === id);
 		this._product.ingredients.splice(index, 1);
 
 		const updateObj = {};
@@ -178,9 +196,27 @@ class Product extends Page {
 		for(let key in changes) {
 			const ingredient = this._allIngredients.find((ingredient) => ingredient._id === key);
 			changes[key]['group'] = ingredient.group;
-		}
 
-		return this.props.ingredientApi.update(changes);
+			const { count } = changes[key];
+
+			this._product.ingredients.forEach((ingredient) => {
+				if (ingredient.id === key) {
+					ingredient.count = count;
+				}
+			});
+
+			delete changes[key]['count'];
+		}
+		
+		const updateObj = {};
+		updateObj[this._product._id] = this._product;
+
+		return Promise
+			.all([
+				this.props.ingredientApi.update(changes),
+				this.props.productApi.update(updateObj)
+			])
+			.then((data) => data[0]);
 	}
 }
 

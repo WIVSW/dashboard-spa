@@ -18,16 +18,17 @@ class Table extends Page {
 		return this.props.ingredientsGroupApi
 			.getByIds([ id ])
 			.then((group) => {
+				const parse = (ingredients) => {
+					const tableFiltered = this._parseTable(Array.isArray(ingredients) ? ingredients : []);
+					data.table = new TableModel(tableFiltered.table);
+					
+					return data;
+				}
 				if (group && group.length) {
 					data.group = group[0];
 					return this.props.ingredientApi
 						.getByIds(data.group.ingredients)
-						.then((ingredients) => {
-							const tableFiltered = this._parseTable(ingredients);
-							data.table = new TableModel(tableFiltered.table);
-
-							return data;
-						})
+						.then(parse, parse)
 				} else {
 					data.table = new TableModel({ head: [], body: [] });
 					return data;

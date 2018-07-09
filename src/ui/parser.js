@@ -8,8 +8,6 @@ class Parser {
 	}
 
 	parse(table) {
-		console.log(table);
-
 		return this
 			._readTable(table)
 			.then((workbook) => {

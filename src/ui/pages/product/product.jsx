@@ -39,7 +39,6 @@ class Product extends Page {
 	}
 
 	getTemplate() {
-		console.log(this.state);
 		return (
 			<div>
 				<h1 style={{padding: '15px 30px'}}>{this.state.product.name}</h1>
@@ -180,8 +179,19 @@ class Product extends Page {
 			.update(updateObj)
 			.then((data) => {
 				this.setState({
-					table: {body: parsedTable.body},
-					product,
+					table: {
+						head: parsedTable.head,
+						body: parsedTable.body,
+						getCellByKey: parsedTable.getCellByKey,
+						popupVisible: parsedTable.popupVisible,
+						showAddBtn: parsedTable.showAddBtn
+					},
+					product: {
+						ingredients: product.ingredients,
+						_id: product._id,
+						name: product.name,
+						price: product.price
+					},
 					ingredients
 				});
 				return data;
@@ -189,7 +199,7 @@ class Product extends Page {
 	}
 
 	_delete(id) {
-		const { product } = this.state;
+		const { product, ingredients, table } = this.state;
 		const index = product.ingredients.findIndex((ingredient) => ingredient.id === id);
 		product.ingredients.splice(index, 1);
 
@@ -199,7 +209,22 @@ class Product extends Page {
 		return this.props.productApi
 			.update(updateObj)
 			.then((data) => {
-				this.setState({ product });
+				this.setState({
+					table: {
+						head: table.head,
+						body: table.body.filter((item) => item.id !== id),
+						getCellByKey: table.getCellByKey,
+						popupVisible: table.popupVisible,
+						showAddBtn: table.showAddBtn
+					},
+					product: {
+						ingredients: product.ingredients,
+						_id: product._id,
+						name: product.name,
+						price: product.price
+					},
+					ingredients: ingredients.filter((item) => item._id !== id)
+				});
 				return data;
 			});
 	}

@@ -18,34 +18,35 @@ class Product extends Page {
 				this.props.productApi.getByIds([ id ])
 			])
 			.then((data) => {
-				this._allIngredients = data[0];
-				this._product = data[1] &&
+				const allIngredients = data[0];
+				const product = data[1] &&
 					(data[1].length && data[1][0]) || null;
 
-				this._ingredients = this._product ?
-					this._product.ingredients.map(
+				const ingredients = product ?
+					product.ingredients.map(
 						(item) => {
-							const found = this._allIngredients.find((ingredient) => ingredient._id === item.id);
+							const found = allIngredients.find((ingredient) => ingredient._id === item.id);
 							found.count = item.count;
 							return found;
 						}
 					) :
 					[];
 
-				const table = new TableModel(this._parseTable(this._ingredients).table);
+				const table = new TableModel(this._parseTable(ingredients).table);
 
-				return { table };
+				return { table, product, ingredients, allIngredients };
 			})
 	}
 
 	getTemplate() {
+		console.log(this.state);
 		return (
 			<div>
-				<h1 style={{padding: '15px 30px'}}>{this._product.name}</h1>
+				<h1 style={{padding: '15px 30px'}}>{this.state.product.name}</h1>
 				<Autocomplete
 					onAdd={(product) => this._onInputNew(product)}
-					source={this._allIngredients}
-					ignore={this._product.ingredients.map((ingredient) => ingredient.id)}
+					source={this.state.allIngredients}
+					ignore={this.state.product.ingredients.map((ingredient) => ingredient.id)}
 				/>
 				<Table
 					table={this.state.table}
@@ -165,41 +166,53 @@ class Product extends Page {
 	}
 
 	_onInputNew(ingredient) {
+		const { product, ingredients } = this.state;
 		const model = new IngredientModel(ingredient);
 		model.count = 1;
-		this._ingredients.push(model);
-		this._product.ingredients.push({ id: model._id, count: 1});
-		const parsedTable = this._parseTable(this._ingredients).table;
+		ingredients.push(model);
+		product.ingredients.push({ id: model._id, count: 1});
+		const parsedTable = this._parseTable(ingredients).table;
 
 		const updateObj = {};
-		updateObj[this._product._id] = this._product;
+		updateObj[product._id] = product;
 
 		return this.props.productApi
 			.update(updateObj)
 			.then((data) => {
-				this.setState({ table: {body: parsedTable.body} });
+				this.setState({
+					table: {body: parsedTable.body},
+					product,
+					ingredients
+				});
 				return data;
 			});
 	}
 
 	_delete(id) {
-		const index = this._product.ingredients.findIndex((ingredient) => ingredient.id === id);
-		this._product.ingredients.splice(index, 1);
+		const { product } = this.state;
+		const index = product.ingredients.findIndex((ingredient) => ingredient.id === id);
+		product.ingredients.splice(index, 1);
 
 		const updateObj = {};
-		updateObj[this._product._id] = this._product;
+		updateObj[product._id] = product;
 
-		return this.props.productApi.update(updateObj);
+		return this.props.productApi
+			.update(updateObj)
+			.then((data) => {
+				this.setState({ product });
+				return data;
+			});
 	}
 
 	_onSave(changes) {
+		const { product } = this.state;
 		for(let key in changes) {
-			const ingredient = this._allIngredients.find((ingredient) => ingredient._id === key);
+			const ingredient = this.state.allIngredients.find((ingredient) => ingredient._id === key);
 			changes[key]['group'] = ingredient.group;
 
 			const { count } = changes[key];
 
-			this._product.ingredients.forEach((ingredient) => {
+			product.ingredients.forEach((ingredient) => {
 				if (ingredient.id === key) {
 					ingredient.count = count;
 				}
@@ -209,7 +222,7 @@ class Product extends Page {
 		}
 		
 		const updateObj = {};
-		updateObj[this._product._id] = this._product;
+		updateObj[product._id] = product;
 
 		return Promise
 			.all([

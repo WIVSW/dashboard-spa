@@ -1,11 +1,13 @@
 import Network from './network';
-import Parser from './parser';
 
 import Ingredient from './api/ingredient';
 import IngredientsGroup from './api/ingredients-group';
 import Menu from './api/menu';
 import Product from './api/product';
 import User from './api/user';
+
+import Parser from './services/parser';
+import ProductCalculator from './services/product-calculator';
 
 
 
@@ -41,6 +43,11 @@ class Application {
 		const { services } = this;
 
 		services.parser = new Parser();
+		
+		services.productCalculator = new ProductCalculator({
+			productApi: this.api.product,
+			ingredientApi: this.api.ingredient
+		});
 	}
 
 }

@@ -30,6 +30,7 @@ export default (props) => {
 					path="/products/:id/total/"
 					component={(deps) => authCheck(
 						<ProductTotal
+							productCalculator={props.services.productCalculator}
 							{...deps}
 						/>, deps)}
 				/>

@@ -1,9 +1,11 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import Page from '../base';
 import Table from '../../blocks/table/table.jsx';
 import TableModel from '../../models/table';
 import Autocomplete from '../../blocks/autocomplete/autocomplete.jsx';
 import IngredientModel from "../../models/ingredient";
+import Button from '../../blocks/button/button.jsx';
 
 class Product extends Page {
 	constructor(props) {
@@ -42,6 +44,35 @@ class Product extends Page {
 		return (
 			<div>
 				<h1 style={{padding: '15px 30px'}}>{this.state.product.name}</h1>
+				<div className="filters">
+					<Button
+						style={{
+							display: 'inline-block',
+							margin: '0 15px 0 0'
+						}}
+						onClick={() => Promise.resolve()}
+					>
+						<Link
+							style={{
+								color: 'inherit',
+								textDecoration: 'none'
+							}}
+							to={`/products/${this.state.product._id}/total/`}
+						>
+							Total
+						</Link>
+					</Button>
+					<Button
+						style={{
+							display: 'inline-block',
+							margin: '0 15px 0 0'
+						}}
+						status={Button.Status.SELECTED}
+						onClick={() => Promise.resolve()}
+					>
+						Ingredients
+					</Button>
+				</div>
 				<Autocomplete
 					onAdd={(product) => this._onInputNew(product)}
 					source={this.state.allIngredients}

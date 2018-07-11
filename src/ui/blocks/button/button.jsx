@@ -20,7 +20,8 @@ class Button extends PureComponent {
 		return (
 			<button
 				type={this.props.type || 'button'}
-				className={`btn ${this.props.className} ${Button.Classes[this.state.status]}`}
+				style={this.props.style || {}}
+				className={`btn ${this.props.className || ''} ${Button.Classes[this.state.status]}`}
 				onClick={() => this._onClick()}
 			>
 				{this.props.children || null}
@@ -49,14 +50,16 @@ class Button extends PureComponent {
 Button.Status = {
 	DISABLED: 0,
 	ACTIVE: 1,
-	WAITING: 2
+	WAITING: 2,
+	SELECTED: 3
 };
 
 
 Button.Classes = {
 	'0': 'btn_disabled',
 	'1': 'btn_active',
-	'2': 'icon-spin btn_loading'
+	'2': 'icon-spin btn_loading',
+	'3': 'btn_selected'
 };
 
 export default Button;

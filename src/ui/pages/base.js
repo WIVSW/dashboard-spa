@@ -10,7 +10,7 @@ class Page extends PureComponent {
 	}
 
 	preload() {
-		return Promise.resolve();
+		return Promise.resolve({});
 	}
 
 	componentWillMount() {

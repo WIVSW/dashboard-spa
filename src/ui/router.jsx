@@ -6,6 +6,7 @@ import Auth from './auth';
 
 import Home from './pages/home/home';
 import Product from './pages/product/product.jsx'
+import ProductTotal from './pages/product-total/product-total.jsx';
 import Products from './pages/products/products';
 import Table from './pages/table/table';
 import Tables from './pages/tables/tables';
@@ -25,6 +26,14 @@ export default (props) => {
 	return (
 		<Layout userApi={props.api.user}>
 			<Switch>
+				<Route
+					path="/products/:id/total/"
+					component={(deps) => authCheck(
+						<ProductTotal
+							{...deps}
+						/>, deps)}
+				/>
+				
 				<Route
 					path="/products/:id"
 					component={(deps) => authCheck(

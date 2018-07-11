@@ -47,6 +47,12 @@ $trasparent: rgba(0,0,0,0);
 			color: $defaultColor;
 		}
 	}
+  
+  	&_selected {
+		background-color: $activeBackground;
+		color: $activeColor;
+		cursor: pointer;
+	}
 
 	&_full-width {
 		width: 100%;

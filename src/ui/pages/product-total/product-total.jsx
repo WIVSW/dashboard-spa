@@ -9,6 +9,7 @@ class ProductTotal extends Page {
 	}
 	
 	getTemplate() {
+		console.log(this.state);
 		return (<div>Product Total {this.props.match.params.id}</div>);
 	}
 }

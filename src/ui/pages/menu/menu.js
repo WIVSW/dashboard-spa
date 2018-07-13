@@ -80,7 +80,7 @@ class Menu extends Page {
 	}
 
 	_parseRow(product) {
-		const row = { id: product._id, cells: [], url: `${this.URL}${product._id}` };
+		const row = { id: product._id, cells: [], url: `${this.URL}${product._id}/total/` };
 
 		const defaultComponent = (data) =>
 			<span

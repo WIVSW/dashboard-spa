@@ -50,7 +50,6 @@ class Product extends Page {
 							display: 'inline-block',
 							margin: '0 15px 0 0'
 						}}
-						onClick={() => Promise.resolve()}
 					>
 						<Link
 							style={{
@@ -68,7 +67,6 @@ class Product extends Page {
 							margin: '0 15px 0 0'
 						}}
 						status={Button.Status.SELECTED}
-						onClick={() => Promise.resolve()}
 					>
 						Ingredients
 					</Button>

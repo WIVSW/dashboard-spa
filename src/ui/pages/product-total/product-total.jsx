@@ -19,7 +19,6 @@ class ProductTotal extends Page {
 	}
 	
 	getTemplate() {
-		console.log(this.state);
 		return  (
 			<div>
 				<h1 style={{padding: '15px 30px'}}>{this.state.product.name}</h1>
@@ -30,7 +29,6 @@ class ProductTotal extends Page {
 							margin: '0 15px 0 0'
 						}}
 						status={Button.Status.SELECTED}
-						onClick={() => Promise.resolve()}
 					>
 						Total
 					</Button>
@@ -39,7 +37,6 @@ class ProductTotal extends Page {
 							display: 'inline-block',
 							margin: '0 15px 0 0'
 						}}
-						onClick={() => Promise.resolve()}
 					>
 						<Link
 							style={{

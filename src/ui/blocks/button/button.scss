@@ -17,6 +17,13 @@ $trasparent: rgba(0,0,0,0);
 	cursor: pointer;
 	transition: all 250ms ease-in;
 
+
+	a {
+		display: inline-block;
+		margin: -15px -20px;
+		padding: 15px 20px;
+	}
+
 	&_active {
 		background-color: $defaultBackground;
 		color: $defaultColor;

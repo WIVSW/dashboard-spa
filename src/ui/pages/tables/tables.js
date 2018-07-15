@@ -75,8 +75,9 @@ class Tables extends Page {
 	}
 
 	_onAdd(data) {
-		this.props.serviceParser.parse(data['table']);
-		return Promise.reject();
+		return this.props.serviceParser
+			.parse(data['table'])
+			.then(() => Promise.reject('dev mode'));
 
 		return this.props.ingredientsGroupApi
 			.create([ data ])

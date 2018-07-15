@@ -59,6 +59,7 @@ export default (props) => {
 					<Tables
 						{...deps}
 						ingredientsGroupApi={props.api.ingredientsGroup}
+						ingredientApi={props.api.ingredient}
 						serviceParser={props.services.parser}
 					/>,
 					deps

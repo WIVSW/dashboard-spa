@@ -39,6 +39,7 @@ class Parser {
 		sheets = this._bindValues(sheets);
 		sheets = sheets.reduce((prev, curr) => prev.concat(curr.value), []);
 		sheets = this._divideByCount(sheets);
+		sheets = this._toIngredients(sheets);
 		
 		return sheets;
 	}
@@ -151,6 +152,30 @@ class Parser {
 			
 			return newRow;
 		});
+	}
+	
+	_toIngredients(rows) {
+		return rows.map((row) => {
+			const ingredientKeys = [
+				'name',
+				'group',
+				'supplier',
+				'parameters',
+				'primecost'
+			];
+			const ingredient = { parameters: {} };
+			
+			Object
+				.keys(row)
+				.forEach((key) => {
+					if (ingredientKeys.includes(key))
+						ingredient[key] = row[key];
+					else
+						ingredient.parameters[key] = row[key];
+				});
+			
+			return ingredient;
+		})
 	}
 	
 	_getMapKeyType(sheets) {

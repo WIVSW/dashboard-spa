@@ -77,11 +77,19 @@ class Tables extends Page {
 	_onAdd(data) {
 		return this.props.serviceParser
 			.parse(data['table'])
-			.then(() => Promise.reject('dev mode'));
-
-		return this.props.ingredientsGroupApi
-			.create([ data ])
-			.then((groups) => groups.map(this._parseRow.bind(this)));
+			.then((table) => {
+				return this.props.ingredientsGroupApi
+					.create([ { name: data['name'] } ])
+					.then((groups) => {
+						const toSend = table.map((row) => {
+							row.group = groups[0]._id;
+							return row;
+						});
+						return this.props.ingredientApi
+							.create(toSend)
+							.then(() => groups.map(this._parseRow.bind(this)));
+					})
+			});
 	}
 
 	_onSave(changes) {

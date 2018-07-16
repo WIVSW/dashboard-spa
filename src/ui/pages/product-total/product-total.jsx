@@ -3,6 +3,8 @@ import Page from '../base';
 import { Link } from 'react-router-dom';
 import Button from "../../blocks/button/button.jsx";
 import TableSimple from '../../blocks/table-simple/table-simple.jsx';
+import Popup from '../../blocks/popup/popup.jsx';
+import ExportForm from '../product/export-form.json';
 
 
 class ProductTotal extends Page {
@@ -14,6 +16,7 @@ class ProductTotal extends Page {
 				data.tables = {};
 				data.tables.product = this._parseProductTable(data.product);
 				data.tables.ingredients = this._parseIngredientsTable(data.ingredients);
+				data.exportVisible = false;
 				return data;
 			});
 	}
@@ -49,6 +52,15 @@ class ProductTotal extends Page {
 						</Link>
 					</Button>
 				</div>
+				<Button
+					style={
+						{
+							display: 'inline-block',
+							margin: '0 0 0 30px'
+						}
+					}
+					onClick={this._onExportClick.bind(this)}
+				>Export to DOCX</Button>
 				<h1 style={{padding: '15px 30px'}}>Product keys</h1>
 				<TableSimple table={this.state.tables.product} />
 				<div
@@ -60,6 +72,13 @@ class ProductTotal extends Page {
 					<h1 style={{padding: '15px 30px'}}>Ingredients keys</h1>
 					<TableSimple table={this.state.tables.ingredients} style={{width: 'auto', minWidth: '100%'}}/>
 				</div>
+				<Popup
+					title="Add new item"
+					isVisible={this.state.exportVisible}
+					onSend={this._onExportSend.bind(this)}
+					onClose={this._onExportClose.bind(this)}
+					form={ExportForm}
+				/>
 			</div>
 		);
 	}
@@ -109,6 +128,25 @@ class ProductTotal extends Page {
 		});
 		
 		return table;
+	}
+	
+	_onExportClick() {
+		this.setState({ exportVisible: true });
+		return Promise.resolve();
+	}
+	
+	_onExportSend(data) {
+		return this.props.serviceParser
+			.parseWord(data['table'])
+			.then((data) => {
+				console.log('result', data)
+				return Promise.resolve();
+			})
+	}
+	
+	_onExportClose() {
+		this.setState({ exportVisible: false });
+		return Promise.resolve();
 	}
 }
 

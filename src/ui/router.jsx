@@ -31,6 +31,7 @@ export default (props) => {
 					component={(deps) => authCheck(
 						<ProductTotal
 							productCalculator={props.services.productCalculator}
+							serviceParser={props.services.parser}
 							{...deps}
 						/>, deps)}
 				/>
@@ -41,6 +42,7 @@ export default (props) => {
 						<Product
 							productApi={props.api.product}
 							ingredientApi={props.api.ingredient}
+							serviceParser={props.services.parser}
 							{...deps}
 						/>, deps)}
 				/>

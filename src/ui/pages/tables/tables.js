@@ -76,7 +76,7 @@ class Tables extends Page {
 
 	_onAdd(data) {
 		return this.props.serviceParser
-			.parse(data['table'])
+			.parseTable(data['table'])
 			.then((table) => {
 				return this.props.ingredientsGroupApi
 					.create([ { name: data['name'] } ])

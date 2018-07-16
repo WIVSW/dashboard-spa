@@ -6,8 +6,12 @@ class Parser {
 	constructor() {
 		this._rABS = true;
 	}
+	
+	parseWord(file) {
+		return Promise.resolve(file);
+	}
 
-	parse(table) {
+	parseTable(table) {
 		return this
 			._readTable(table)
 			.then(this._parseWorkBook.bind(this));

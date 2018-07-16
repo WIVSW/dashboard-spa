@@ -1,0 +1,39 @@
+{
+  "action": "Export docx",
+  "inputs": [
+	{
+	  "name": "name",
+	  "export": true,
+	  "valid": false,
+	  "placeholder": "Type name of file here",
+	  "type": "text",
+	  "value": "",
+	  "validation": {
+		"required": true,
+		"pattern": [
+		  "[\\S]{3,}",
+		  "i"
+		]
+	  },
+	  "message": "",
+	  "error": "The name of file should be at least three letters length"
+	},
+	{
+	  "name": "table",
+	  "export": true,
+	  "valid": false,
+	  "placeholder": "Example",
+	  "type": "file",
+	  "value": "",
+	  "validation": {
+		"required": true,
+		"pattern": [
+		  ".(docx|docx)$",
+		  "i"
+		]
+	  },
+	  "message": "",
+	  "error": "File should be an docx file"
+	}
+  ]
+}

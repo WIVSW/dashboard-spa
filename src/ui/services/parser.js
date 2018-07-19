@@ -1,5 +1,5 @@
 import { read, utils } from 'xlsx';
-
+import docx4js from "docx4js"
 
 
 class Parser {
@@ -8,6 +8,18 @@ class Parser {
 	}
 	
 	parseWord(file) {
+		docx4js.load(file).then(docx=>{
+			//you can render docx to anything (react elements, tree, dom, and etc) by giving a function
+			//docx.render(function createElement(type,props,children){
+			//	return {type,props,children}
+			//});
+			console.log(docx.officeDocument.content("*"));
+			debugger;
+			//you can change content on docx.officeDocument.content, and then save
+			//docx.officeDocument.content("w\\:t").text("hello");
+			//docx.save("~/changed.docx")
+			
+		});
 		return Promise.resolve(file);
 	}
 

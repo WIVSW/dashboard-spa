@@ -6,8 +6,6 @@ import TableModel from '../../models/table';
 import Autocomplete from '../../blocks/autocomplete/autocomplete.jsx';
 import IngredientModel from "../../models/ingredient";
 import Button from '../../blocks/button/button.jsx';
-import Popup from '../../blocks/popup/popup.jsx';
-import ExportForm from './export-form.json';
 
 class Product extends Page {
 	constructor(props) {
@@ -73,15 +71,6 @@ class Product extends Page {
 						Ingredients
 					</Button>
 				</div>
-				<Button
-					style={
-						{
-							display: 'inline-block',
-							margin: '0 0 0 30px'
-						}
-					}
-					onClick={this._onExportClick.bind(this)}
-				>Export to DOCX</Button>
 				<Autocomplete
 					onAdd={(product) => this._onInputNew(product)}
 					source={this.state.allIngredients}
@@ -93,13 +82,6 @@ class Product extends Page {
 
 					onRowDelete={(id) => this._delete(id)}
 					onSave={(changes) => this._onSave(changes)}
-				/>
-				<Popup
-					title="Add new item"
-					isVisible={this.state.exportVisible}
-					onSend={this._onExportSend.bind(this)}
-					onClose={this._onExportClose.bind(this)}
-					form={ExportForm}
 				/>
 			</div>
 		);
@@ -302,25 +284,6 @@ class Product extends Page {
 				this.props.productApi.update(updateObj)
 			])
 			.then((data) => data[0]);
-	}
-	
-	_onExportClick() {
-		this.setState({ exportVisible: true });
-		return Promise.resolve();
-	}
-
-	_onExportSend(data) {
-		return this.props.serviceParser
-			.parseWord(data['table'])
-			.then((data) => {
-				console.log('result', data)
-				return Promise.resolve();
-			})
-	}
-
-	_onExportClose() {
-		this.setState({ exportVisible: false });
-		return Promise.resolve();
 	}
 }
 

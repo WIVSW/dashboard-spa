@@ -136,8 +136,9 @@ class ProductTotal extends Page {
 	}
 	
 	_onExportSend(data) {
+		const { id } = this.props.match.params;
 		return this.props.serviceParser
-			.parseWord(data['table'])
+			.parseWord(data['table'], data['name'], id)
 			.then((data) => {
 				console.log('result', data)
 				return Promise.resolve();

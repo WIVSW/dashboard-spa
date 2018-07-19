@@ -41,12 +41,14 @@ class Application {
 
 	_bindServices() {
 		const { services } = this;
-
-		services.parser = new Parser();
 		
 		services.productCalculator = new ProductCalculator({
 			productApi: this.api.product,
 			ingredientApi: this.api.ingredient
+		});
+		
+		services.parser = new Parser({
+			calculator: services.productCalculator
 		});
 	}
 

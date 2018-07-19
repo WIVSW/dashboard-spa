@@ -3,30 +3,69 @@ import docx4js from "docx4js"
 
 
 class Parser {
-	constructor() {
+	constructor(deps) {
 		this._rABS = true;
+		
+		this._calculator = deps.calculator;
 	}
 	
-	parseWord(file) {
-		docx4js.load(file).then(docx=>{
-			//you can render docx to anything (react elements, tree, dom, and etc) by giving a function
-			//docx.render(function createElement(type,props,children){
-			//	return {type,props,children}
-			//});
-			console.log(docx.officeDocument.content("*"));
-			debugger;
-			//you can change content on docx.officeDocument.content, and then save
-			//docx.officeDocument.content("w\\:t").text("hello");
-			//docx.save("~/changed.docx")
-			
-		});
-		return Promise.resolve(file);
+	parseWord(file, name, id) {
+		return Promise
+			.all([
+				docx4js.load(file),
+				this._calculator.getProductTotalById(id)
+			])
+			.then((data) => {
+				const [ docx, total ] = data;
+				const document = docx.officeDocument;
+				return this
+					._parseXml(document, total)
+					.then(() => docx.save(`${name}.docx`));
+			});
 	}
 
 	parseTable(table) {
 		return this
 			._readTable(table)
 			.then(this._parseWorkBook.bind(this));
+	}
+	
+	_parseXml(document, total) {
+		const nodes = this._getAllTextNodes(document);
+		this._replaceProductKey(nodes, total.product);
+		console.log('nodes', nodes);
+		return Promise.reject();
+	}
+	
+	_getAllTextNodes(document) {
+		return document.content("w\\:t");
+	}
+	
+	_replaceProductKey(nodes, product) {
+		const KEY = this._calculator.getProductKey('');
+		const keys = Object.keys(product);
+		const nodesLength = nodes.length;
+		
+		const replaceAllKeys = (str) => {
+				keys.forEach((key) => {
+					const currentKey = this._calculator.getProductKey(key);
+					str = str.replace(currentKey, product[key]);
+				});
+			return str;
+		};
+		
+		for(let i = 0; i < nodesLength; i++) {
+			const childrenLength = nodes[i].children.length;
+			for(let j = 0; j < childrenLength; j++) {
+				const param = nodes[i].children[j];
+				if (
+					typeof param.data === 'string' &&
+					param.data.includes(KEY)
+				) {
+					param.data = replaceAllKeys(param.data);
+				}
+			}
+		}
 	}
 
 	_readTable(table) {

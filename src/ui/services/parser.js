@@ -32,13 +32,154 @@ class Parser {
 	
 	_parseXml(document, total) {
 		const nodes = this._getAllTextNodes(document);
+		const tables = this._getDocumentTables(document);
+		this._markValidXmlTables(tables, document);
+
 		this._replaceProductKey(nodes, total.product);
-		console.log('nodes', nodes);
-		return Promise.reject();
+		this._replaceIngredientKey(total.ingredients, document);
+
+		return Promise.resolve();
+	}
+	
+	_replaceIngredientKey(ingredients, document) {
+		const KEY = this._calculator.getIngredientKey('');
+		const rowsShouldAddCount = ingredients.length - 1;
+		const tables = document.content('w\\:tbl.valid');
+
+		if (!tables.length) return;
+
+		if (rowsShouldAddCount <= 0) return;
+		
+		
+		for(let i = 0; i < tables.length; i++) {
+			const tr = document.content(`w\\:tbl.valid:nth-of-type(${i + 1}) w\\:tr:last-child`);
+			tr.addClass('iterable');
+			
+			for(let j = 0; j < rowsShouldAddCount; j++) {
+				const cloned = document.content(`w\\:tbl.valid:nth-of-type(${i + 1}) w\\:tr:last-child`).clone();
+				document
+					.content(`w\\:tbl.valid:nth-of-type(${i + 1})`)
+					.append(cloned)
+			}
+		}
+		let tablesArr = [];
+		for(let i = 0; i < tables.length; i++) {
+			tablesArr[i] = [];
+			const rows = document.content(`w\\:tbl.valid:nth-of-type(${i + 1}) w\\:tr.iterable`);
+			for(let j = 0; j < rows.length; j++) {
+				tablesArr[i][j] = rows[j];
+			}
+		}
+		
+		tablesArr = tablesArr.map(
+			(table) => table.map((row) => this._findAllTextInChildren(row))
+		);
+		
+		tablesArr.forEach((table) => {
+			table.forEach((row, i) => {
+				const ing = ingredients[i];
+				const keys = Object.keys(ing);
+				const replaceAllKeys = (str) => {
+					keys.forEach((key) => {
+						const currentKey = this._calculator.getIngredientKey(key);
+						str = str.replace(currentKey, ing[key]);
+					});
+					return str;
+				};
+				
+				row.forEach((cell) => {
+					let value = cell.data;
+					if (value.includes(KEY)) {
+						cell.data = replaceAllKeys(value);
+					}
+				});
+			});
+		});
 	}
 	
 	_getAllTextNodes(document) {
 		return document.content("w\\:t");
+	}
+	
+	_getDocumentTables(document) {
+		return document.content("w\\:tbl");
+	}
+	
+	_markValidXmlTables(tables, document) {
+		const length = tables.length;
+		const validTables = [];
+		for(var i = 0; i < length; i++) {
+			const rows = tables[i].children.filter((item) => item.name === 'w:tr');
+
+			if (rows.length > 2) {
+				validTables.push(false);
+				continue;
+			}
+			
+			const rowsWithText = rows.map((row) => this._findAllTextInChildren(row));
+			const ingredientsRows = this._getIngredientsRows(rowsWithText);
+			
+			if (ingredientsRows.length !== 1) {
+				validTables.push(false);
+				continue;
+			}
+			
+			validTables.push(true);
+		}
+		
+		validTables.forEach((valid, i) => {
+			const index = i + 1;
+			if (valid) {
+				document
+					.content(`w\\:tbl:nth-of-type(${index})`)
+					.addClass('valid');
+			}
+		});
+	}
+	
+	_getIngredientsRows(rows) {
+		const KEY = this._calculator.getIngredientKey('');
+		return rows.filter((row) => {
+			const hasIngredientKey = row.reduce((prev, curr) => {
+				return prev || curr.data.includes(KEY);
+			}, false);
+			
+			return hasIngredientKey;
+		});
+	}
+	
+	_findAllTextInChildren(row) {
+		const children = this._getAllChildsRecursive(row);
+		return children.filter((child) => child.type === 'text');
+	}
+	
+	_getAllChildsRecursive(node) {
+		let result = [];
+
+		const getChildren = (elem) => {
+			return elem.children ? elem.children : [];
+		};
+		
+		const concatChilds = (children) => {
+			result = result.concat(children);
+		};
+
+		const recursive = (elem) => {
+			const children = getChildren(elem);
+			concatChilds(children);
+			children.forEach((child) => recursive(child))
+		};
+		
+		recursive(node);
+		
+		return result;
+	}
+	
+	_concatRecursive(array) {
+		return array.reduce((a,b) => {
+			const c = Array.isArray(b) && b.length ? this._concatRecursive(b) : b;
+			return a.concat(c);
+		});
 	}
 	
 	_replaceProductKey(nodes, product) {

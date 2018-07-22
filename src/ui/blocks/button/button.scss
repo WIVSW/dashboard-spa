@@ -1,0 +1,69 @@
+$defaultBackground: #edeff2;
+$defaultColor: #8f95a4;
+
+$activeBackground: #f98700;
+$activeColor: #fff;
+
+$trasparent: rgba(0,0,0,0);
+
+.btn {
+	overflow: hidden;
+	position: relative;
+	display: block;
+	border: none;
+	margin: 15px 15px 0 auto;
+	padding: 15px 20px;
+	border-radius: 30px;
+	cursor: pointer;
+	transition: all 250ms ease-in;
+
+
+	a {
+		display: inline-block;
+		margin: -15px -20px;
+		padding: 15px 20px;
+	}
+
+	&_active {
+		background-color: $defaultBackground;
+		color: $defaultColor;
+
+		&:hover {
+			color: $activeColor;
+			background-color: $activeBackground;
+		}
+	}
+
+	&_disabled {
+		background-color: $defaultBackground;
+		color: $defaultColor;
+		cursor: default;
+	}
+
+	&_loading {
+		background-color: $trasparent;
+		color: $trasparent;
+		cursor: default;
+
+		&:before {
+			position: absolute;
+			left: 50%;
+			top: 50%;
+			margin-top: -8px;
+			margin-left: -8px;
+			color: $defaultColor;
+		}
+	}
+  
+  	&_selected {
+		background-color: $activeBackground;
+		color: $activeColor;
+		cursor: pointer;
+	}
+
+	&_full-width {
+		width: 100%;
+		margin: 0;
+		border-radius: 0;
+	}
+}

@@ -1,0 +1,39 @@
+{
+	"action": "Send table",
+	"inputs": [
+		{
+			"name": "name",
+			"export": true,
+			"valid": false,
+			"placeholder": "Type name of table here",
+			"type": "text",
+			"value": "",
+			"validation": {
+				"required": true,
+				"pattern": [
+					"[\\S]{3,}",
+					"i"
+				]
+			},
+			"message": "",
+			"error": "The name of table should be at least three letters length"
+		},
+		{
+			"name": "table",
+			"export": true,
+			"valid": false,
+			"placeholder": "Type your password here",
+			"type": "file",
+			"value": "",
+			"validation": {
+				"required": true,
+				"pattern": [
+					".(xlsx|xls)$",
+					"i"
+				]
+			},
+			"message": "",
+			"error": "File should be an excel file"
+		}
+	]
+}

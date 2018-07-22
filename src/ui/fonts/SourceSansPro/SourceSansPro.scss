@@ -1,0 +1,29 @@
+@font-face {
+	font-family: 'source_sans_proregular';
+	src:
+		url('./regular/sourcesanspro-webfont.woff2') format('woff2'),
+		url('./regular/sourcesanspro-webfont.woff') format('woff'),
+		url('./regular/sourcesanspro-webfont.ttf') format('truetype'),
+		url('./regular/sourcesanspro-webfont.svg#source_sans_proregular') format('svg');
+	font-weight: normal;
+	font-style: normal;
+
+}
+
+// Hack for webpack that remove empty scss files from bundle
+// TODO: Move all @font-face to one file and import it to index.scss
+.layout {
+  font-family: 'source_sans_proregular';
+}
+
+@font-face {
+	font-family: 'source_sans_prolight';
+	src:
+		url('./light/sourcesansprolight-webfont.woff2') format('woff2'),
+		url('./light/sourcesansprolight-webfont.woff') format('woff'),
+		url('./light/sourcesansprolight-webfont.ttf') format('truetype'),
+		url('./light/sourcesansprolight-webfont.svg#source_sans_prolight') format('svg');
+	font-weight: normal;
+	font-style: normal;
+
+}

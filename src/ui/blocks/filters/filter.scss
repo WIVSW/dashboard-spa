@@ -1,0 +1,23 @@
+.filters {
+	display: block;
+	width: 100%;
+	padding: 0 30px;
+	margin-bottom: 15px;
+
+	&__item {
+		display: inline-block;
+		margin-right: 10px;
+		border: none;
+		background-color: #f7f9ff;
+		color: #8f95a4;
+		height: 35px;
+		padding: 0 15px;
+		border-radius: 30px;
+		cursor: pointer;
+		transition: all 250ms ease-in;
+		&:hover, &_selected {
+			color: #fff;
+			background-color: #f98700;
+		}
+	}
+}

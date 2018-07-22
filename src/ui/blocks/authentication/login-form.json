@@ -1,0 +1,39 @@
+{
+	"action": "Log in",
+	"inputs": [
+		{
+			"name": "email",
+			"export": true,
+			"valid": false,
+			"placeholder": "Type your email here",
+			"type": "email",
+			"value": "",
+			"validation": {
+				"required": true,
+				"pattern": [
+					"[\\w\\d]{3,}@[\\w\\d]{3,}.[\\w]{2,}",
+					"i"
+				]
+			},
+			"message": "",
+			"error": "Incorrect email"
+		},
+		{
+			"name": "password",
+			"export": true,
+			"valid": false,
+			"placeholder": "Type your password here",
+			"type": "password",
+			"value": "",
+			"validation": {
+				"required": true,
+				"pattern": [
+					"[\\S]{3,}",
+					"i"
+				]
+			},
+			"message": "",
+			"error": "Password should have at least three symbols"
+		}
+	]
+}

@@ -1,14 +1,24 @@
-import './index.scss';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
 
+import './base.scss';
 
+import './fonts/fontello/fontello.scss';
+import './fonts/SourceSansPro/SourceSansPro.scss'
+import './fonts/spin/spin.scss';
+import './fonts/controls/controls.scss';
 
-const App = () => (
-	<div>
-		Welcome to React
-	</div>
+import Router from './router.jsx';
+import Application from './application';
+
+const app = new Application();
+
+const App = (props) => (
+	<BrowserRouter>
+		<Router {...props} />
+	</BrowserRouter>
 );
 
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+ReactDOM.render(<App api={app.api} services={app.services}/>, document.getElementById('root'));

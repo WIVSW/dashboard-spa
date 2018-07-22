@@ -1,0 +1,50 @@
+.table {
+	width: 100%;
+	border-spacing: 0;
+	table-layout: fixed;
+
+	&__row {
+		height: 70px;
+		background-color: #f7f9ff;
+
+		&:nth-child(even) {
+			background-color: #fff;
+		}
+	}
+
+	&__head {
+		background-color: #edeff2;
+	}
+	
+	&__cell {
+		text-align: left;
+		padding: 0 15px;
+		color: #000;
+	}
+
+	&__controls {
+		display: block;
+		text-align: center;
+	}
+
+	&__control {
+		display: inline;
+		margin: 0 5px;
+		background: none;
+		outline: none;
+		border: none;
+		text-decoration: none;
+		color: #000000;
+		font-size: 22px;
+		cursor: pointer;
+		transition: all 250ms ease-in;
+		&:hover {
+			color: #f98700;
+		}
+	}
+
+	&__btn {
+		height: 35px;
+		padding: 0 15px;
+	}
+}

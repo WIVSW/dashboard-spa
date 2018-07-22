@@ -12,29 +12,49 @@ class IngredientRoute extends BaseRoute {
 
 		super({path, router, model});
 	}
+	
+	create(body) {
+		const updateObj = {};
+		let dataToResolve;
+		return super
+			.create(body)
+			.then((doc) => {
+				dataToResolve = doc;
+				doc.forEach((ingredient) => {
+					if (!Array.isArray(updateObj[ingredient.group]))
+						updateObj[ingredient.group] = [];
+					
+					updateObj[ingredient.group].push(ingredient._id);
+					
+				});
+				
+				const promises = Object
+					.keys(updateObj)
+					.map((groupId) => IngredientsGroupModel.findById(groupId));
+				
+				return Promise.all(promises);
+			})
+			.then((groups) => {
+				const promises = Object
+					.keys(updateObj)
+					.map((id) => {
+						const onlyUnique = (val, i, arr) => arr.indexOf(val) === i;
+						const foundGroup = groups.find((group) => String(group._id) === String(id));
+						const ingredients = foundGroup.ingredients
+							.concat(updateObj[id])
+							.filter(onlyUnique);
 
-	_addIgredientToGroup(id, group) {
-		if (group[0].ingredients.indexOf(id) !== -1)
-			return Promise.resolve();
-
-		group[0].ingredients.push(id);
-		const { ingredients } = group[0];
-		return IngredientsGroupModel.findByIdAndUpdate(group[0].id, { $set: { ingredients} }, { new: true });
+						return IngredientsGroupModel.findByIdAndUpdate(id, { $set: { ingredients} }, { new: true });
+					});
+				return Promise.all(promises);
+			})
+			.then(() => dataToResolve);
 	}
 
 	_createOne(data) {
-		let group, model;
 		return this
 			._hasAccessToGroup(data.group, data._creator)
-			.then((doc) => {
-				group = doc;
-				return super._createOne(data);
-			})
-			.then((doc) => {
-				model = doc;
-				return this._addIgredientToGroup(doc._id, group)
-			})
-			.then(() => model)
+			.then((doc) => super._createOne(data))
 			.catch(() => null)
 	}
 
@@ -88,8 +108,7 @@ class IngredientRoute extends BaseRoute {
 	_updateOne(_id, body) {
 		return this
 			._hasAccessToGroup(body[_id].group, body._creator)
-			.then(() => super._updateOne(body))
-			.catch(() => null)
+			.then(() => super._updateOne(_id, body))
 	}
 }
 

@@ -6,7 +6,8 @@
  "scripts": {
   "build": "export NODE_ENV=production && webpack --mode=production",
   "start:server": "nodemon src/server/server.js",
-  "start:ui": "export NODE_ENV=development && webpack-dev-server --mode=development"
+  "start:ui": "export NODE_ENV=development && webpack-dev-server --mode=development",
+  "release": "node scripts/release.js"
  },
  "repository": {
   "type": "git",
@@ -43,6 +44,7 @@
   "cssnano": "^3.10.0",
   "extract-text-webpack-plugin": "^4.0.0-beta.0",
   "file-loader": "^1.1.11",
+  "fs-extra": "^7.0.0",
   "html-webpack-plugin": "^3.2.0",
   "node-sass": "^4.9.0",
   "nodemon": "^1.17.5",

@@ -4,3 +4,4 @@ package-lock.json
 src/config/config.json
 src/public
 test
+release

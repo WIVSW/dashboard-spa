@@ -47,13 +47,13 @@ class ProductCalculator {
 		product.primecost = this._getPrimeCostFromIngredients(ingredients);
 		product.profit = this._parseNumber(product.price) - this._parseNumber(product.primecost);
 		product.parameters = this._getParametersFromIngredients(ingredients);
-		product = this._convertNumbersToStrings(product);
 		product = this._bindParameters(product);
+		product = this._convertNumbersToStrings(product);
 		product = this._removeExtras(product);
 		
+		ingredients = ingredients.map((ingredient) => this._bindParameters(ingredient));
 		ingredients = ingredients.map((ingredient) => this._convertStringsToNumbers(ingredient));
 		ingredients = ingredients.map((ingredient) => this._convertNumbersToStrings(ingredient));
-		ingredients = ingredients.map((ingredient) => this._bindParameters(ingredient));
 		ingredients = ingredients.map((ingredient) => this._removeExtras(ingredient));
 		
 		return { product, ingredients };
@@ -96,9 +96,13 @@ class ProductCalculator {
 	_removeExtras(source) {
 		const exludes = [
 			'_id',
+			'_id_integer',
+			'_id_decimal',
 			'ingredients',
 			'parameters',
-			'group'
+			'group',
+			'group_integer',
+			'group_decimal'
 		];
 		
 		exludes.forEach((key) => {
@@ -126,8 +130,18 @@ class ProductCalculator {
 		];
 
 		for(let key in product) {
-			if (typeof product[key] === 'number' && !exludes.includes(key))
-				product[key] = product[key].toFixed(2).replace('.', ',');
+			if (typeof product[key] === 'number' && !exludes.includes(key)) {
+				const value = product[key];
+				const isNegative = value < 0;
+				const str = Math.abs(value / 1).toFixed(2);
+				const integer = `${ isNegative ? '-' : '' }${str.replace(/\.\d{0,}/, '')}`;
+				const decimal = str.replace(/\d{0,}\./, '');
+				
+				product[`${key}_integer`] = integer;
+				product[`${key}_decimal`] = decimal;
+				
+				delete product[key];
+			}
 		}
 
 		return product;

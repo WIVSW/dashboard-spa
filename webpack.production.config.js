@@ -65,10 +65,10 @@ module.exports = {
 		]
 	},
 	plugins: [
+		new CleanWebpackPlugin('src/public/*'),
 		new ExtractTextPlugin("css/[name].[chunkhash].css"),
 		new HtmlWebpackPlugin({
 			template: 'src/ui/index.html'
-		}),
-		new CleanWebpackPlugin('src/public/*.*')
+		})
 	]
 };

@@ -14,7 +14,8 @@ module.exports = {
 	},
 	output: {
 		path: path.resolve(__dirname, 'src/public'),
-		filename: "js/[name].[chunkhash].js"
+		filename: "js/[name].[chunkhash].js",
+		publicPath: '/'
 	},
 	optimization: {
 		splitChunks: {
@@ -60,8 +61,16 @@ module.exports = {
 					]
 				})
 			},
-			{ test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: "url-loader" },
-			{ test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/, use: "url-loader" }
+			{
+				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				exclude: /node_modules/,
+				use: "url-loader?name=src/public/fonts/[name].[ext]"
+			},
+			{
+				test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
+				exclude: /node_modules/,
+				use: "url-loader?name=src/public/fonts/[name].[ext]"
+			}
 		]
 	},
 	plugins: [

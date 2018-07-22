@@ -1,0 +1,7 @@
+{
+	"development": {
+		"MONGODB_URI": "mongodb://localhost:27017/DashboardSPA",
+		"PORT": 3000,
+	 	"JWT_SECRET": "abc123"
+	}
+}

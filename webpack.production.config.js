@@ -64,12 +64,12 @@ module.exports = {
 			{
 				test: /\.woff(2)?(\?v=[0-9]\.[0-9]\.[0-9])?$/,
 				exclude: /node_modules/,
-				use: "url-loader?name=src/public/fonts/[name].[ext]"
+				use: "file-loader?name=fonts/[name].[ext]"
 			},
 			{
 				test: /\.(ttf|eot|svg)(\?v=[0-9]\.[0-9]\.[0-9])?$/,
 				exclude: /node_modules/,
-				use: "url-loader?name=src/public/fonts/[name].[ext]"
+				use: "file-loader?name=fonts/[name].[ext]"
 			}
 		]
 	},

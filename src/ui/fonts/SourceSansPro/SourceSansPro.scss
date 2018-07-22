@@ -10,6 +10,12 @@
 
 }
 
+// Hack for webpack that remove empty scss files from bundle
+// TODO: Move all @font-face to one file and import it to index.scss
+.layout {
+  font-family: 'source_sans_proregular';
+}
+
 @font-face {
 	font-family: 'source_sans_prolight';
 	src:

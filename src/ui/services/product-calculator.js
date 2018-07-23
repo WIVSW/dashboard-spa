@@ -26,6 +26,9 @@ class ProductCalculator {
 				const product = data[0];
 				const ids = product.ingredients.map(item => item.id);
 				
+				if (!ids.length)
+					return Promise.resolve({ product, ingredients: [] });
+				
 				return this._ingredientApi
 					.getByIds(ids)
 					.then((data) => {

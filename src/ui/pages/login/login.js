@@ -9,11 +9,6 @@ export default class extends PureComponent {
 	}
 
 	_onAuth() {
-		const canGoBack = this.props.history.location.key;
-		if (canGoBack) {
-			this.props.history.goBack();
-		} else {
-			this.props.history.push('/');
-		}
+		this.props.history.push('/');
 	}
 };

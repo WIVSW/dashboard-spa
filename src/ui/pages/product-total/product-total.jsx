@@ -63,15 +63,29 @@ class ProductTotal extends Page {
 				>Export to DOCX</Button>
 				<h1 style={{padding: '15px 30px'}}>Product keys</h1>
 				<TableSimple table={this.state.tables.product} />
-				<div
-					style={{
-						width: '100%',
-						overflow: 'auto'
-					}}
-				>
-					<h1 style={{padding: '15px 30px'}}>Ingredients keys</h1>
-					<TableSimple table={this.state.tables.ingredients} style={{width: 'auto', minWidth: '100%'}}/>
-				</div>
+				{
+					this.state.tables.ingredients ?
+						(
+							<div
+								style={{
+									width: '100%',
+									overflow: 'auto'
+								}}
+							>
+								<h1 style={{padding: '15px 30px'}}>Ingredients keys</h1>
+								<TableSimple
+									table={this.state.tables.ingredients}
+									style={{width: 'auto', minWidth: '100%'}}
+								/>
+							</div>
+						)
+						:
+						(
+							<h1 style={{padding: '15px 30px'}}>
+								No ingredients added yet.
+							</h1>
+						)
+				}
 				<Popup
 					title="Add new item"
 					isVisible={this.state.exportVisible}
@@ -111,6 +125,9 @@ class ProductTotal extends Page {
 	}
 	
 	_parseIngredientsTable(ingredients) {
+		if (!ingredients || !ingredients.length)
+			return null;
+			
 		const table = {};
 		
 		table.head = Object.keys(ingredients[0]).map((key) => this.props.productCalculator.getIngredientKey(key));

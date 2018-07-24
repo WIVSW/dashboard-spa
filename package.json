@@ -1,6 +1,6 @@
 {
  "name": "dashboard-spa",
- "version": "1.0.0",
+ "version": "1.0.1",
  "description": "This Dashboard app for small office tasks",
  "main": "index.js",
  "scripts": {
